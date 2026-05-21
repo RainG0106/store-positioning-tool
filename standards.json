@@ -238,7 +238,7 @@
     },
     {
       "id": "packing-station",
-      "name": "打包台",
+      "name": "打包台（数量根据门店实际需求）",
       "icon": "package",
       "description": "打包用具存放及备货区",
       "required": true,
