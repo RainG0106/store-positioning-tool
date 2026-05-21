@@ -368,9 +368,9 @@
     },
     {
       "id": "nigiri-workstation",
-      "name": "手握工作台",
+      "name": "手握工作台acb",
       "icon": "utensils",
-      "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
+      "description": "手握寿司、刺身、小吃类产品的存放与出品操作（A台）",
       "required": true,
       "positionRequirement": "必须设置在紧邻出餐口的位置",
       "temperature": "0℃ ~ 8℃",
