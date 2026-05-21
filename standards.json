@@ -368,7 +368,7 @@
     },
     {
       "id": "nigiri-workstation",
-      "name": "手握工作台12",
+      "name": "手握工作台",
       "icon": "utensils",
       "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
       "required": true,
