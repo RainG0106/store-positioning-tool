@@ -222,7 +222,7 @@
     },
     {
       "id": "serving-window",
-      "name": "出餐口",
+      "name": "餐点出餐口",
       "icon": "bell-concierge",
       "description": "订单出餐及呼叫取餐区",
       "required": true,
