@@ -515,11 +515,15 @@
           "type": "desktop",
           "items": [
             {
-              "category": "工具/辅材",
+              "category": "工具",
               "items": [
                 "小垃圾桶",
                 "卷席",
-                "火枪"
+                "火枪",
+                "电子秤",
+                "酱料架",
+                "刀具",
+                "砧板"
               ],
               "labelColor": "blue"
             },
@@ -531,35 +535,13 @@
               "labelColor": "yellow"
             },
             {
-              "category": "食品配料",
+              "category": "配料",
               "items": [
-                "整张紫菜"
+                "整张紫菜",
+                "切条紫菜",
+                "肉松"
               ],
               "labelColor": "green"
-            },
-            {
-              "category": "工具",
-              "items": [
-                "电子秤",
-                "酱料架"
-              ],
-              "labelColor": "blue"
-            },
-            {
-              "category": "食品配料",
-              "items": [
-                "肉松",
-                "切条紫菜"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "操作区",
-              "items": [
-                "刀具",
-                "砧板"
-              ],
-              "labelColor": "blue"
             }
           ]
         },
@@ -572,38 +554,35 @@
             {
               "category": "蔬菜类",
               "items": [
-                "青瓜条/丝",
-                "玉米",
-                "炸虾"
+                "",
+                "",
+                ""
               ],
               "labelColor": "green"
             },
             {
-              "category": "鱼类",
+              "category": "半成品食材",
               "items": [
+                "吞拿鱼",
+                "八爪碎",
+                "红蟹子",
+                "蟹肉",
+                "海草碎",
+                "模拟蟹柳",
                 "芥末章鱼",
-                "钢丝蛋丝",
+                "炸虾",
+                "玉米",
+                "芝士片",
+                "萝卜条",
+                "青瓜条/丝",
                 "红蟹子"
               ],
               "labelColor": "green"
             },
             {
-              "category": "海鲜类",
+              "category": "配料",
               "items": [
-                "萝卜条",
-                "鳕鱼片",
-                "吞拿鱼",
-                "八爪碎"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "其他",
-              "items": [
-                "芝士片",
-                "蟹肉",
-                "海草碎",
-                "模拟蟹柳"
+                "蛋丝"
               ],
               "labelColor": "green"
             }
