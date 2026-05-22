@@ -992,53 +992,6 @@
         "每周至少一次全面除霜与消毒",
         "每日早班检查温度，低于-15℃"
       ]
-    },
-    {
-      "id": "upright-fridge",
-      "name": "手握寿司、刺身、小吃类产品的存放与出品操作",
-      "icon": "utensils",
-      "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
-      "required": true,
-      "note": "根据门店规模配置，存放物料参考备料/米饭/小吃工作台冰箱内部",
-      "referenceArea": "prep-workstation",
-      "items": [
-        {
-          "category": "肉类",
-          "items": [
-            "猪软骨",
-            "鸡蛋",
-            "肥牛",
-            "蟹肉"
-          ],
-          "labelColor": "green"
-        },
-        {
-          "category": "海鲜/鱼类",
-          "items": [
-            "八爪碎",
-            "八爪小吃",
-            "海草碎",
-            "大福",
-            "吞拿鱼",
-            "海草小吃",
-            "鳕鱼片",
-            "章鱼小丸子",
-            "芥末章鱼"
-          ],
-          "labelColor": "green"
-        },
-        {
-          "category": "其他",
-          "items": [
-            "红蟹子",
-            "玉米",
-            "山药泥",
-            "味付油扬",
-            "鸣门卷"
-          ],
-          "labelColor": "green"
-        }
-      ]
     }
   ],
   "purchasingMaterials": [
