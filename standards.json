@@ -6,7 +6,7 @@
   "areas": [
     {
       "id": "cashier",
-      "name": "收银机区域",
+      "name": "收银台核心操作区",
       "icon": "cash-register",
       "description": "收银台核心操作区",
       "required": true,
@@ -15,7 +15,8 @@
         "键盘",
         "鼠标",
         "扫码枪",
-        "小票机"
+        "小票机",
+        "出餐宝"
       ],
       "positioningRules": [],
       "standards": {
@@ -24,7 +25,7 @@
     },
     {
       "id": "sushi-display",
-      "name": "寿司展示柜",
+      "name": "寿司陈列展示区",
       "icon": "store",
       "description": "商场铺专属寿司陈列展示区",
       "required": false,
@@ -215,7 +216,7 @@
     },
     {
       "id": "serving-window",
-      "name": "出餐口",
+      "name": "出餐区",
       "icon": "bell-concierge",
       "description": "订单出餐及呼叫取餐区",
       "required": true,
@@ -231,7 +232,7 @@
     },
     {
       "id": "packing-station",
-      "name": "打包台",
+      "name": "打包用具存放及备货区",
       "icon": "package",
       "description": "打包用具存放及备货区",
       "required": true,
@@ -571,9 +572,9 @@
     },
     {
       "id": "prep-workstation",
-      "name": "备料/米饭/小吃工作台",
+      "name": "军舰、小吃、饭类制作",
       "icon": "cooking-pot",
-      "description": "军舰、小吃、饭类制作（C台，非所有门店标配）",
+      "description": "非所有门店标配",
       "required": false,
       "note": "地方大的店会有第三个操作台（C台），一般门店只有两个操作台",
       "temperature": "0℃ ~ 3℃",
@@ -742,7 +743,7 @@
     },
     {
       "id": "storage-shelf",
-      "name": "后厨货架",
+      "name": "后厨仓库包材和原材料存放区",
       "icon": "warehouse",
       "description": "后厨仓库包材和原材料存放区",
       "required": true,
@@ -788,7 +789,7 @@
     },
     {
       "id": "rice-cooking",
-      "name": "煮饭区",
+      "name": "米饭煮制与拌醋核心操作区",
       "icon": "flame",
       "description": "米饭煮制与搅拌核心操作区",
       "required": true,
@@ -912,7 +913,7 @@
     },
     {
       "id": "freezer",
-      "name": "冷冻四门冰箱",
+      "name": "冷冻食材储存区（冷冻四门冰箱/卧式冰箱）",
       "icon": "snowflake",
       "description": "冷冻食材储存区",
       "required": true,
@@ -994,10 +995,10 @@
     },
     {
       "id": "upright-fridge",
-      "name": "直立冷藏柜（解冻区）",
-      "icon": "refrigerator",
-      "description": "冷冻食材解冻暂存区（非所有门店标配）",
-      "required": false,
+      "name": "手握寿司、刺身、小吃类产品的存放与出品操作",
+      "icon": "utensils",
+      "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
+      "required": true,
       "note": "根据门店规模配置，存放物料参考备料/米饭/小吃工作台冰箱内部",
       "referenceArea": "prep-workstation",
       "items": [
