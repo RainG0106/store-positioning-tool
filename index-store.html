@@ -2530,12 +2530,30 @@ function clearAll() {
   showToast('🗑️ 已清空');
 }
 
-function clearCache() {
+async function clearCache() {
   if (!confirm('确定清除本地缓存并重新从 GitHub 加载最新数据吗？\n\n清除后将从 GitHub 重新获取标准数据。')) return;
   localStorage.removeItem('store_standards_cache');
   localStorage.removeItem('store_standards_last_update');
-  showToast('✅ 缓存已清除，正在重新加载...');
-  setTimeout(() => location.reload(), 500);
+  showToast('⏳ 正在从 GitHub 拉取最新数据...');
+
+  // 立即强制拉取最新数据，而不是靠 reload 时的 fetch（可能被 CDN 缓存）
+  try {
+    const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now() + '&_=' + Math.random());
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('store_standards_cache', JSON.stringify(data));
+      const timeStr = new Date().toLocaleString('zh-CN');
+      localStorage.setItem('store_standards_last_update', timeStr);
+      showToast('✅ 已获取最新数据，正在刷新...');
+      setTimeout(() => location.reload(), 300);
+      return;
+    }
+  } catch (e) {
+    console.warn('[clearCache] Fetch failed:', e);
+  }
+
+  showToast('⚠️ GitHub 拉取失败，将使用内置数据并刷新...');
+  setTimeout(() => location.reload(), 800);
 }
 
 function savePlan() {
