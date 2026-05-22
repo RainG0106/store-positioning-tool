@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-05-21",
+  "lastUpdated": "2026-05-22",
   "brand": "苍井寿司",
   "storeType": "通用版",
   "areas": [
@@ -222,7 +222,7 @@
     },
     {
       "id": "serving-window",
-      "name": "出餐口",
+      "name": "打包台出餐口",
       "icon": "bell-concierge",
       "description": "订单出餐及呼叫取餐区",
       "required": true,
