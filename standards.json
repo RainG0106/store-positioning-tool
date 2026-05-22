@@ -552,15 +552,6 @@
           "temperature": "0℃ ~ 8℃",
           "items": [
             {
-              "category": "蔬菜类",
-              "items": [
-                "",
-                "",
-                ""
-              ],
-              "labelColor": "green"
-            },
-            {
               "category": "半成品食材",
               "items": [
                 "吞拿鱼",
