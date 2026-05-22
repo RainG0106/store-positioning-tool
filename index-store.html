@@ -314,7 +314,7 @@
     font-weight: 600;
     color: var(--text);
     flex-shrink: 0;
-    white-space: nowrap;
+    word-break: break-all;
   }
   .placed-block-row-items {
     color: var(--text-muted);
@@ -1641,7 +1641,7 @@ function buildBlockBodyHTML(areaData, block) {
     displays.forEach(m => {
       html += `<div class="placed-block-row" style="font-size:10px;">
         <div class="placed-block-dot dot-yellow"></div>
-        <div class="placed-block-row-items" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m}</div>
+        <div class="placed-block-row-items" style="word-break:break-all;">${m}</div>
       </div>`;
     });
     html += `</div>`;
@@ -1654,7 +1654,7 @@ function buildBlockBodyHTML(areaData, block) {
     materials.forEach(m => {
       html += `<div class="placed-block-row" style="font-size:10px;">
         <div class="placed-block-dot dot-green"></div>
-        <div class="placed-block-row-items" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m}</div>
+        <div class="placed-block-row-items" style="word-break:break-all;">${m}</div>
       </div>`;
     });
     html += `</div>`;
