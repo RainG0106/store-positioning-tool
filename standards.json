@@ -434,49 +434,33 @@
           "temperature": "0℃ ~ 8℃",
           "items": [
             {
-              "category": "半成品寿司",
+              "category": "半成品食材",
               "items": [
-                "柠檬",
                 "八爪小吃",
                 "北极贝",
                 "玉子片",
-                "蟹脚"
+                "蟹脚",
+                "长蟹脚",
+                "鲷鱼片",
+                "咸蛋黄",
+                "小甜虾",
+                "熟虾"
               ],
               "labelColor": "green"
             },
             {
-              "category": "粽子叶",
-              "items": [
-                "粽子叶"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "海鲜/小吃",
+              "category": "小吃",
               "items": [
                 "海草小吃",
-                "长蟹脚",
-                "鳕鱼片"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "大福类",
-              "items": [
                 "大福",
-                "章鱼小丸子",
-                "咸蛋黄",
-                "鳗鱼片"
+                "章鱼小丸子"
               ],
               "labelColor": "green"
             },
             {
-              "category": "甜虾类",
+              "category": "配料",
               "items": [
-                "小甜虾",
-                "山药泥",
-                "熟虾",
-                "三文鱼片"
+                "柠檬"
               ],
               "labelColor": "green"
             }
