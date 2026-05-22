@@ -494,7 +494,7 @@
               "labelColor": "blue"
             },
             {
-              "category": "食品配料",
+              "category": "操作台层架食品",
               "items": [
                 "芝麻"
               ],
@@ -503,7 +503,8 @@
             {
               "category": "耗材",
               "items": [
-                "汽油瓶"
+                "汽油瓶",
+                "手套"
               ],
               "labelColor": "yellow"
             }
@@ -526,13 +527,6 @@
                 "砧板"
               ],
               "labelColor": "blue"
-            },
-            {
-              "category": "耗材",
-              "items": [
-                "手套"
-              ],
-              "labelColor": "yellow"
             },
             {
               "category": "配料",
