@@ -1,9 +1,8 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-05-21",
+  "lastUpdated": "2026-05-22",
   "brand": "苍井寿司",
   "storeType": "通用版",
-
   "areas": [
     {
       "id": "cashier",
@@ -11,7 +10,13 @@
       "icon": "cash-register",
       "description": "收银台核心操作区",
       "required": true,
-      "equipment": ["收银机", "键盘", "鼠标", "扫码枪", "小票机"],
+      "equipment": [
+        "收银机",
+        "键盘",
+        "鼠标",
+        "扫码枪",
+        "小票机"
+      ],
       "positioningRules": [],
       "standards": {
         "notes": "定位标准待补充"
@@ -37,21 +42,95 @@
             "标准一致：所有产品陈列标准一致，保持品牌形象"
           ],
           "displayOrder": [
-            {"position": 1, "category": "套餐", "items": ["门店热卖套餐", "王者套餐", "火炙全熟单人餐", "快乐大儿童套餐"]},
-            {"position": 2, "category": "卷物", "items": ["炸虾加州卷", "鳗鱼炸虾卷", "各种小卷"]},
-            {"position": 3, "category": "军舰", "items": ["红蟹子军舰", "芝麻八爪军舰", "吞拿鱼军舰", "肉松军舰", "玉米军舰", "海草军舰"]},
-            {"position": 4, "category": "三文鱼系列", "items": ["PLUS蜜酱三文鱼寿司", "PLUS焦糖三文鱼寿司", "三文鱼寿司"]},
-            {"position": 5, "category": "经典/炙烧", "items": ["鳗鱼寿司", "炙烧玉子", "炙烧蟹脚", "焦糖鲷鱼", "鸭胸寿司"]},
-            {"position": 6, "category": "虾类", "items": ["炙烧虾", "焦糖虾"]}
+            {
+              "position": 1,
+              "category": "套餐",
+              "items": [
+                "门店热卖套餐",
+                "王者套餐",
+                "火炙全熟单人餐",
+                "快乐大儿童套餐"
+              ]
+            },
+            {
+              "position": 2,
+              "category": "卷物",
+              "items": [
+                "炸虾加州卷",
+                "鳗鱼炸虾卷",
+                "各种小卷"
+              ]
+            },
+            {
+              "position": 3,
+              "category": "军舰",
+              "items": [
+                "红蟹子军舰",
+                "芝麻八爪军舰",
+                "吞拿鱼军舰",
+                "肉松军舰",
+                "玉米军舰",
+                "海草军舰"
+              ]
+            },
+            {
+              "position": 4,
+              "category": "三文鱼系列",
+              "items": [
+                "PLUS蜜酱三文鱼寿司",
+                "PLUS焦糖三文鱼寿司",
+                "三文鱼寿司"
+              ]
+            },
+            {
+              "position": 5,
+              "category": "经典/炙烧",
+              "items": [
+                "鳗鱼寿司",
+                "炙烧玉子",
+                "炙烧蟹脚",
+                "焦糖鲷鱼",
+                "鸭胸寿司"
+              ]
+            },
+            {
+              "position": 6,
+              "category": "虾类",
+              "items": [
+                "炙烧虾",
+                "焦糖虾"
+              ]
+            }
           ],
           "dailySchedule": [
-            {"time": "开店前", "task": "检查展示柜温度，确保0-8℃；检查产品陈列是否满位"},
-            {"time": "营业中-每30分钟", "task": "检查产品陈列，补充缺货位置"},
-            {"time": "营业中-每1小时", "task": "检查保鲜膜/透明罩是否完好"},
-            {"time": "营业中-每2小时", "task": "检查产品效期，移除过期产品"},
-            {"time": "14:00", "task": "下午班更换产品陈列，更新新鲜感"},
-            {"time": "20:00", "task": "晚间补充陈列，确保营业结束前满位"},
-            {"time": "闭店后", "task": "清理展示柜，回收未售产品，消毒清洁"}
+            {
+              "time": "开店前",
+              "task": "检查展示柜温度，确保0-8℃；检查产品陈列是否满位"
+            },
+            {
+              "time": "营业中-每30分钟",
+              "task": "检查产品陈列，补充缺货位置"
+            },
+            {
+              "time": "营业中-每1小时",
+              "task": "检查保鲜膜/透明罩是否完好"
+            },
+            {
+              "time": "营业中-每2小时",
+              "task": "检查产品效期，移除过期产品"
+            },
+            {
+              "time": "14:00",
+              "task": "下午班更换产品陈列，更新新鲜感"
+            },
+            {
+              "time": "20:00",
+              "task": "晚间补充陈列，确保营业结束前满位"
+            },
+            {
+              "time": "闭店后",
+              "task": "清理展示柜，回收未售产品，消毒清洁"
+            }
           ],
           "prohibited": [
             "禁止将过期产品陈列在展示柜中",
@@ -74,13 +153,56 @@
             "suggestedQty": "10个（正佳店）"
           },
           "items": [
-            {"category": "餐具", "items": ["小圆盘"], "labelColor": "yellow"},
-            {"category": "限定礼盒", "items": ["新团圆大满贯", "花花寿司礼盒", "露营盒"], "labelColor": "yellow"},
-            {"category": "餐盒", "items": ["0号餐盒", "8件餐盒", "12件纸盒（4色）", "12件餐盒"], "labelColor": "yellow"},
-            {"category": "外带包装", "items": ["二人世界纸盒"], "labelColor": "yellow"},
-            {"category": "盖子", "items": ["对应餐盒盖子"], "labelColor": "yellow"},
-            {"category": "胶袋", "items": ["小号胶袋", "中号胶袋", "大号胶袋"], "labelColor": "yellow"},
-            {"category": "调味料", "items": ["酱油", "芥辣"], "labelColor": "yellow"}
+            {
+              "category": "餐具",
+              "items": [
+                "小圆盘"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "餐盒",
+              "items": [
+                "0号餐盒",
+                "8件餐盒",
+                "12件纸盒（4色）",
+                "12件餐盒"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "外带包装",
+              "items": [
+                "二人世界纸盒",
+                "新团圆大满贯",
+                "花花寿司礼盒"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "盖子",
+              "items": [
+                "对应餐盒盖子"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "胶袋",
+              "items": [
+                "小号胶袋",
+                "中号胶袋",
+                "大号胶袋"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "调味料",
+              "items": [
+                "酱油",
+                "芥辣"
+              ],
+              "labelColor": "yellow"
+            }
           ],
           "standards": [
             "先进先出原则：补货时旧款靠前，新款放后",
@@ -97,7 +219,11 @@
       "icon": "bell-concierge",
       "description": "订单出餐及呼叫取餐区",
       "required": true,
-      "equipment": ["夹单条", "小票机", "出餐宝"],
+      "equipment": [
+        "夹单条",
+        "小票机",
+        "出餐宝"
+      ],
       "positioningRules": [],
       "standards": {
         "notes": "定位标准待补充"
@@ -120,28 +246,41 @@
             {
               "position": 1,
               "name": "组合餐具包",
-              "items": ["筷子+纸巾+酱包+芥辣+酱油碟（建议一人份）"],
+              "items": [
+                "筷子+纸巾+酱包+芥辣+酱油碟（建议一人份）"
+              ],
               "labelColor": "yellow",
               "partition": null
             },
             {
               "position": 2,
               "name": "芥辣包 & 酱油包",
-              "items": ["芥辣包", "酱油包"],
+              "items": [
+                "芥辣包",
+                "酱油包"
+              ],
               "labelColor": "yellow",
               "partition": "中间竖隔板，分左右两格"
             },
             {
               "position": 3,
               "name": "散装餐具",
-              "items": ["筷子", "勺子", "酱油碟"],
+              "items": [
+                "筷子",
+                "勺子",
+                "酱油碟"
+              ],
               "labelColor": "yellow",
               "partition": "三分格：筷子大格竖放 / 勺子竖放 / 酱油碟叠放"
             },
             {
               "position": 4,
               "name": "打包辅材区",
-              "items": ["打包封条", "丝带", "热敏打印纸"],
+              "items": [
+                "打包封条",
+                "丝带",
+                "热敏打印纸"
+              ],
               "labelColor": "yellow",
               "partition": null
             }
@@ -164,11 +303,51 @@
             "material": "木柜"
           },
           "items": [
-            {"category": "餐盒（整包）", "items": ["0号餐盒", "4-6件餐盒", "8件餐盒", "12件餐盒", "18件餐盒"], "labelColor": "yellow"},
-            {"category": "盖子（整包）", "items": ["对应餐盒盖子"], "labelColor": "yellow"},
-            {"category": "餐具（整包）", "items": ["筷子", "勺子", "酱油碟"], "labelColor": "yellow"},
-            {"category": "调味包（整包）", "items": ["芥辣包", "酱油包"], "labelColor": "yellow"},
-            {"category": "纸巾/辅材（整包）", "items": ["餐巾纸", "打包封条", "丝带", "热敏打印纸"], "labelColor": "yellow"}
+            {
+              "category": "餐盒（整包）",
+              "items": [
+                "0号餐盒",
+                "4-6件餐盒",
+                "8件餐盒",
+                "12件餐盒",
+                "18件餐盒"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "盖子（整包）",
+              "items": [
+                "对应餐盒盖子"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "餐具（整包）",
+              "items": [
+                "筷子",
+                "勺子",
+                "酱油碟"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "调味包（整包）",
+              "items": [
+                "芥辣包",
+                "酱油包"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "纸巾/辅材（整包）",
+              "items": [
+                "餐巾纸",
+                "打包封条",
+                "丝带",
+                "热敏打印纸"
+              ],
+              "labelColor": "yellow"
+            }
           ],
           "standards": [
             "拆箱存放：所有餐盒、盖子等耗材需拆箱放进柜子",
@@ -182,9 +361,9 @@
     },
     {
       "id": "nigiri-workstation",
-      "name": "手握工作台",
+      "name": "手握寿司、刺身、小吃类产品的存放与出品操作",
       "icon": "utensils",
-      "description": "手握寿司、刺身、小吃类产品的存放与出品操作（A台）",
+      "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
       "required": true,
       "positionRequirement": "必须设置在紧邻出餐口的位置",
       "temperature": "0℃ ~ 8℃",
@@ -201,7 +380,13 @@
           ],
           "warning": "此层架仅限即将出餐的寿司临时摆放，禁止放置工具及其他物品",
           "items": [
-            {"category": "临时出餐", "items": ["托盘架"], "labelColor": "blue"}
+            {
+              "category": "临时出餐",
+              "items": [
+                "托盘架"
+              ],
+              "labelColor": "blue"
+            }
           ]
         },
         {
@@ -209,10 +394,37 @@
           "name": "操作台桌面",
           "type": "desktop",
           "items": [
-            {"category": "食品配料", "items": ["寿司绑带"], "labelColor": "green"},
-            {"category": "调料区", "items": ["椰蓉"], "labelColor": "green"},
-            {"category": "工具区", "items": ["火枪", "酱料架"], "labelColor": "blue"},
-            {"category": "操作区", "items": ["烤盘", "砧板", "小垃圾桶"], "labelColor": "blue"}
+            {
+              "category": "食品配料",
+              "items": [
+                "寿司绑带"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "调料区",
+              "items": [
+                "椰蓉"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "工具区",
+              "items": [
+                "火枪",
+                "酱料架"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "操作区",
+              "items": [
+                "烤盘",
+                "砧板",
+                "小垃圾桶"
+              ],
+              "labelColor": "blue"
+            }
           ]
         },
         {
@@ -221,11 +433,53 @@
           "type": "fridge",
           "temperature": "0℃ ~ 8℃",
           "items": [
-            {"category": "半成品寿司", "items": ["柠檬", "八爪小吃", "北极贝", "玉子片", "蟹脚"], "labelColor": "green"},
-            {"category": "粽子叶", "items": ["粽子叶"], "labelColor": "green"},
-            {"category": "海鲜/小吃", "items": ["海草小吃", "长蟹脚", "鳕鱼片"], "labelColor": "green"},
-            {"category": "大福类", "items": ["大福", "章鱼小丸子", "咸蛋黄", "鳗鱼片"], "labelColor": "green"},
-            {"category": "甜虾类", "items": ["小甜虾", "山药泥", "熟虾", "三文鱼片"], "labelColor": "green"}
+            {
+              "category": "半成品寿司",
+              "items": [
+                "柠檬",
+                "八爪小吃",
+                "北极贝",
+                "玉子片",
+                "蟹脚"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "粽子叶",
+              "items": [
+                "粽子叶"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "海鲜/小吃",
+              "items": [
+                "海草小吃",
+                "长蟹脚",
+                "鳕鱼片"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "大福类",
+              "items": [
+                "大福",
+                "章鱼小丸子",
+                "咸蛋黄",
+                "鳗鱼片"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "甜虾类",
+              "items": [
+                "小甜虾",
+                "山药泥",
+                "熟虾",
+                "三文鱼片"
+              ],
+              "labelColor": "green"
+            }
           ],
           "standards": [
             "层架仅限即将出餐的寿司临时摆放，禁止放置工具及其他物品"
@@ -254,9 +508,29 @@
             "无论操作台是1.5米还是1.2米，桌面及层架上需要摆放的物料都不可少"
           ],
           "items": [
-            {"category": "设备", "items": ["饭团机", "微波炉", "空气炸锅"], "labelColor": "blue"},
-            {"category": "食品配料", "items": ["芝麻"], "labelColor": "green"},
-            {"category": "耗材", "items": ["汽油瓶"], "labelColor": "yellow"}
+            {
+              "category": "设备",
+              "items": [
+                "饭团机",
+                "微波炉",
+                "空气炸锅"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "食品配料",
+              "items": [
+                "芝麻"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "耗材",
+              "items": [
+                "汽油瓶"
+              ],
+              "labelColor": "yellow"
+            }
           ]
         },
         {
@@ -264,12 +538,53 @@
           "name": "操作台桌面",
           "type": "desktop",
           "items": [
-            {"category": "工具/辅材", "items": ["小垃圾桶", "卷席", "火枪"], "labelColor": "blue"},
-            {"category": "耗材", "items": ["手套"], "labelColor": "yellow"},
-            {"category": "食品配料", "items": ["整张紫菜"], "labelColor": "green"},
-            {"category": "工具", "items": ["电子秤", "酱料架"], "labelColor": "blue"},
-            {"category": "食品配料", "items": ["肉松", "切条紫菜"], "labelColor": "green"},
-            {"category": "操作区", "items": ["刀具", "砧板"], "labelColor": "blue"}
+            {
+              "category": "工具/辅材",
+              "items": [
+                "小垃圾桶",
+                "卷席",
+                "火枪"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "耗材",
+              "items": [
+                "手套"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "category": "食品配料",
+              "items": [
+                "整张紫菜"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "工具",
+              "items": [
+                "电子秤",
+                "酱料架"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "食品配料",
+              "items": [
+                "肉松",
+                "切条紫菜"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "操作区",
+              "items": [
+                "刀具",
+                "砧板"
+              ],
+              "labelColor": "blue"
+            }
           ]
         },
         {
@@ -278,10 +593,44 @@
           "type": "fridge",
           "temperature": "0℃ ~ 8℃",
           "items": [
-            {"category": "蔬菜类", "items": ["青瓜条/丝", "玉米", "炸虾"], "labelColor": "green"},
-            {"category": "鱼类", "items": ["芥末章鱼", "钢丝蛋丝", "红蟹子"], "labelColor": "green"},
-            {"category": "海鲜类", "items": ["萝卜条", "鳕鱼片", "吞拿鱼", "八爪碎"], "labelColor": "green"},
-            {"category": "其他", "items": ["芝士片", "蟹肉", "海草碎", "模拟蟹柳"], "labelColor": "green"}
+            {
+              "category": "蔬菜类",
+              "items": [
+                "青瓜条/丝",
+                "玉米",
+                "炸虾"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "鱼类",
+              "items": [
+                "芥末章鱼",
+                "钢丝蛋丝",
+                "红蟹子"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "海鲜类",
+              "items": [
+                "萝卜条",
+                "鳕鱼片",
+                "吞拿鱼",
+                "八爪碎"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "其他",
+              "items": [
+                "芝士片",
+                "蟹肉",
+                "海草碎",
+                "模拟蟹柳"
+              ],
+              "labelColor": "green"
+            }
           ]
         }
       ]
@@ -301,13 +650,82 @@
           "type": "shelf",
           "shelfLevels": 3,
           "items": [
-            {"level": 3, "category": "上层食品", "items": ["玉米", "裙带菜", "酱油", "芝麻", "吞拿鱼", "汤料包", "芥辣"], "labelColor": "green"},
-            {"level": 3, "category": "上层耗材", "items": ["汽油瓶"], "labelColor": "yellow"},
-            {"level": 2, "category": "中层食品", "items": ["萝卜条", "椰蓉", "紫菜", "鳕鱼片", "香酥丝"], "labelColor": "green"},
-            {"level": 2, "category": "中层耗材", "items": ["汽油瓶（备用）", "手套"], "labelColor": "yellow"},
-            {"level": 2, "category": "中层食品配料", "items": ["白砂糖", "肉松", "沙拉酱"], "labelColor": "green"},
-            {"level": 1, "category": "下层设备", "items": ["微波炉", "空气炸锅", "火枪", "电子秤", "酱料架"], "labelColor": "blue"},
-            {"level": 1, "category": "下层食品", "items": ["汤料包", "裙带菜", "切条紫菜", "肉松"], "labelColor": "green"}
+            {
+              "level": 3,
+              "category": "上层食品",
+              "items": [
+                "玉米",
+                "裙带菜",
+                "酱油",
+                "芝麻",
+                "吞拿鱼",
+                "汤料包",
+                "芥辣"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "level": 3,
+              "category": "上层耗材",
+              "items": [
+                "汽油瓶"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "level": 2,
+              "category": "中层食品",
+              "items": [
+                "萝卜条",
+                "椰蓉",
+                "紫菜",
+                "鳕鱼片",
+                "香酥丝"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "level": 2,
+              "category": "中层耗材",
+              "items": [
+                "汽油瓶（备用）",
+                "手套"
+              ],
+              "labelColor": "yellow"
+            },
+            {
+              "level": 2,
+              "category": "中层食品配料",
+              "items": [
+                "白砂糖",
+                "肉松",
+                "沙拉酱"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "level": 1,
+              "category": "下层设备",
+              "items": [
+                "微波炉",
+                "空气炸锅",
+                "火枪",
+                "电子秤",
+                "酱料架"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "level": 1,
+              "category": "下层食品",
+              "items": [
+                "汤料包",
+                "裙带菜",
+                "切条紫菜",
+                "肉松"
+              ],
+              "labelColor": "green"
+            }
           ]
         },
         {
@@ -315,9 +733,29 @@
           "name": "操作台桌面",
           "type": "desktop",
           "items": [
-            {"category": "工具区", "items": ["刀具", "小垃圾桶"], "labelColor": "blue"},
-            {"category": "操作区", "items": ["小站板（中央主操作区）"], "labelColor": "blue"},
-            {"category": "设备区", "items": ["小烤箱", "冰箱台面"], "labelColor": "blue"}
+            {
+              "category": "工具区",
+              "items": [
+                "刀具",
+                "小垃圾桶"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "操作区",
+              "items": [
+                "小站板（中央主操作区）"
+              ],
+              "labelColor": "blue"
+            },
+            {
+              "category": "设备区",
+              "items": [
+                "小烤箱",
+                "冰箱台面"
+              ],
+              "labelColor": "blue"
+            }
           ]
         },
         {
@@ -326,9 +764,44 @@
           "type": "fridge",
           "temperature": "0℃ ~ 3℃",
           "items": [
-            {"category": "肉类", "items": ["猪软骨", "鸡蛋", "肥牛", "蟹肉"], "labelColor": "green"},
-            {"category": "海鲜/鱼类", "items": ["八爪碎", "八爪小吃", "笋", "海草碎", "大福", "吞拿鱼", "海草小吃", "鳕鱼片", "章鱼小丸子", "芥末章鱼"], "labelColor": "green"},
-            {"category": "其他", "items": ["红蟹子", "玉米", "山药泥", "钢丝蛋丝", "味付油扬", "鸣门卷"], "labelColor": "green"}
+            {
+              "category": "肉类",
+              "items": [
+                "猪软骨",
+                "鸡蛋",
+                "肥牛",
+                "蟹肉"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "海鲜/鱼类",
+              "items": [
+                "八爪碎",
+                "八爪小吃",
+                "笋",
+                "海草碎",
+                "大福",
+                "吞拿鱼",
+                "海草小吃",
+                "鳕鱼片",
+                "章鱼小丸子",
+                "芥末章鱼"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "其他",
+              "items": [
+                "红蟹子",
+                "玉米",
+                "山药泥",
+                "钢丝蛋丝",
+                "味付油扬",
+                "鸣门卷"
+              ],
+              "labelColor": "green"
+            }
           ]
         }
       ]
@@ -350,9 +823,27 @@
         "material": "不锈钢"
       },
       "areas": [
-        {"category": "包装物料区", "items": ["各类包装材料"], "labelColor": "yellow"},
-        {"category": "原材料物料区", "items": ["食品原材料"], "labelColor": "green"},
-        {"category": "寿司米专区", "items": ["寿司米（单独区域，建议靠下放置）"], "labelColor": "green"}
+        {
+          "category": "包装物料区",
+          "items": [
+            "各类包装材料"
+          ],
+          "labelColor": "yellow"
+        },
+        {
+          "category": "原材料物料区",
+          "items": [
+            "食品原材料"
+          ],
+          "labelColor": "green"
+        },
+        {
+          "category": "寿司米专区",
+          "items": [
+            "寿司米（单独区域，建议靠下放置）"
+          ],
+          "labelColor": "green"
+        }
       ],
       "standards": [
         "严禁落地存放：任何货物不得以任何理由直接接触地面",
@@ -381,16 +872,56 @@
             "煮饭时间建议：35~40分钟（一定要露出出气阀）"
           ],
           "steps": [
-            {"step": 1, "action": "称量大米", "detail": "量杯4000毫升黑土御前花米（约3870克）"},
-            {"step": 2, "action": "搅拌洗米", "detail": "提米打散，单手划拌5圈，换水洗3遍；水一定要高于大米表面5厘米"},
-            {"step": 3, "action": "浸泡大米", "detail": "趁水浸泡15分钟；水一定要高于大米表面5厘米"},
-            {"step": 4, "action": "沥水", "detail": "在水槽内提起篮子，沥水15分钟"},
-            {"step": 5, "action": "去水", "detail": "拎起篮子，抖动3~5下"},
-            {"step": 6, "action": "清洁内胆", "detail": "擦净内胆杂项；擦干内胆底部及内壁水分"},
-            {"step": 7, "action": "铺饭布", "detail": "铺布打底，扭去多余水分；平整铺设"},
-            {"step": 8, "action": "放米", "detail": "放入大米"},
-            {"step": 9, "action": "加水", "detail": "加水后将米抹平；1杯=300ml / 2杯=600ml / 3杯=900ml / 4杯=4000ml+"},
-            {"step": 10, "action": "煮饭", "detail": "铺布包裹大米 → 按煮饭键煮55分钟"}
+            {
+              "step": 1,
+              "action": "称量大米",
+              "detail": "量杯4000毫升黑土御前花米（约3870克）"
+            },
+            {
+              "step": 2,
+              "action": "搅拌洗米",
+              "detail": "提米打散，单手划拌5圈，换水洗3遍；水一定要高于大米表面5厘米"
+            },
+            {
+              "step": 3,
+              "action": "浸泡大米",
+              "detail": "趁水浸泡15分钟；水一定要高于大米表面5厘米"
+            },
+            {
+              "step": 4,
+              "action": "沥水",
+              "detail": "在水槽内提起篮子，沥水15分钟"
+            },
+            {
+              "step": 5,
+              "action": "去水",
+              "detail": "拎起篮子，抖动3~5下"
+            },
+            {
+              "step": 6,
+              "action": "清洁内胆",
+              "detail": "擦净内胆杂项；擦干内胆底部及内壁水分"
+            },
+            {
+              "step": 7,
+              "action": "铺饭布",
+              "detail": "铺布打底，扭去多余水分；平整铺设"
+            },
+            {
+              "step": 8,
+              "action": "放米",
+              "detail": "放入大米"
+            },
+            {
+              "step": 9,
+              "action": "加水",
+              "detail": "加水后将米抹平；1杯=300ml / 2杯=600ml / 3杯=900ml / 4杯=4000ml+"
+            },
+            {
+              "step": 10,
+              "action": "煮饭",
+              "detail": "铺布包裹大米 → 按煮饭键煮55分钟"
+            }
           ]
         },
         {
@@ -406,13 +937,41 @@
             "近距离有异味，要更换干净无水分的盖子"
           ],
           "steps": [
-            {"step": 1, "action": "放米饭", "detail": "把米饭倒进拌饭盘"},
-            {"step": 2, "action": "去除饭焦", "detail": "去除所有饭焦"},
-            {"step": 3, "action": "加醋", "detail": "转圈均匀倒入寿司醋；800毫升"},
-            {"step": 4, "action": "搅拌", "detail": "打开平摊，搅拌均匀至黏贴感"},
-            {"step": 5, "action": "划线分隔·按格搅拌", "detail": "每10分钟搅拌一次，一共搅拌3次"},
-            {"step": 6, "action": "放入饭桶密封", "detail": "将米饭装入饭桶，并盖上盖子密封"},
-            {"step": 7, "action": "打印效期贴上", "detail": "用打印机打印效期贴（月、日、时），贴上"}
+            {
+              "step": 1,
+              "action": "放米饭",
+              "detail": "把米饭倒进拌饭盘"
+            },
+            {
+              "step": 2,
+              "action": "去除饭焦",
+              "detail": "去除所有饭焦"
+            },
+            {
+              "step": 3,
+              "action": "加醋",
+              "detail": "转圈均匀倒入寿司醋；800毫升"
+            },
+            {
+              "step": 4,
+              "action": "搅拌",
+              "detail": "打开平摊，搅拌均匀至黏贴感"
+            },
+            {
+              "step": 5,
+              "action": "划线分隔·按格搅拌",
+              "detail": "每10分钟搅拌一次，一共搅拌3次"
+            },
+            {
+              "step": 6,
+              "action": "放入饭桶密封",
+              "detail": "将米饭装入饭桶，并盖上盖子密封"
+            },
+            {
+              "step": 7,
+              "action": "打印效期贴上",
+              "detail": "用打印机打印效期贴（月、日、时），贴上"
+            }
           ]
         }
       ]
@@ -430,9 +989,34 @@
           "name": "上层（虾类、鱼类、蟹脚类）",
           "type": "fridge-compartment",
           "items": [
-            {"category": "虾/鱼类", "items": ["天妇罗虾", "鳕鱼", "北极贝", "熟虾", "长蟹脚（新品）", "鳕鱼片"], "labelColor": "green"},
-            {"category": "蟹类", "items": ["模拟蟹柳", "蟹肉（新品）"], "labelColor": "green"},
-            {"category": "其他", "items": ["芝士片", "玉子"], "labelColor": "green"}
+            {
+              "category": "虾/鱼类",
+              "items": [
+                "天妇罗虾",
+                "鳕鱼",
+                "北极贝",
+                "熟虾",
+                "长蟹脚（新品）",
+                "鳕鱼片"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "蟹类",
+              "items": [
+                "模拟蟹柳",
+                "蟹肉（新品）"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "其他",
+              "items": [
+                "芝士片",
+                "玉子"
+              ],
+              "labelColor": "green"
+            }
           ]
         },
         {
@@ -440,8 +1024,29 @@
           "name": "下层（小吃类）",
           "type": "fridge-compartment",
           "items": [
-            {"category": "小吃类", "items": ["山药泥", "章鱼小丸子", "芝麻八爪", "咸蛋黄", "大福", "芥末章鱼"], "labelColor": "green"},
-            {"category": "其他", "items": ["蟹柳", "海草", "红蟹子", "小甜虾", "肥牛"], "labelColor": "green"}
+            {
+              "category": "小吃类",
+              "items": [
+                "山药泥",
+                "章鱼小丸子",
+                "芝麻八爪",
+                "咸蛋黄",
+                "大福",
+                "芥末章鱼"
+              ],
+              "labelColor": "green"
+            },
+            {
+              "category": "其他",
+              "items": [
+                "蟹柳",
+                "海草",
+                "红蟹子",
+                "小甜虾",
+                "肥牛"
+              ],
+              "labelColor": "green"
+            }
           ]
         }
       ],
@@ -462,13 +1067,45 @@
       "note": "根据门店规模配置，存放物料参考备料/米饭/小吃工作台冰箱内部",
       "referenceArea": "prep-workstation",
       "items": [
-        {"category": "肉类", "items": ["猪软骨", "鸡蛋", "肥牛", "蟹肉"], "labelColor": "green"},
-        {"category": "海鲜/鱼类", "items": ["八爪碎", "八爪小吃", "海草碎", "大福", "吞拿鱼", "海草小吃", "鳕鱼片", "章鱼小丸子", "芥末章鱼"], "labelColor": "green"},
-        {"category": "其他", "items": ["红蟹子", "玉米", "山药泥", "味付油扬", "鸣门卷"], "labelColor": "green"}
+        {
+          "category": "肉类",
+          "items": [
+            "猪软骨",
+            "鸡蛋",
+            "肥牛",
+            "蟹肉"
+          ],
+          "labelColor": "green"
+        },
+        {
+          "category": "海鲜/鱼类",
+          "items": [
+            "八爪碎",
+            "八爪小吃",
+            "海草碎",
+            "大福",
+            "吞拿鱼",
+            "海草小吃",
+            "鳕鱼片",
+            "章鱼小丸子",
+            "芥末章鱼"
+          ],
+          "labelColor": "green"
+        },
+        {
+          "category": "其他",
+          "items": [
+            "红蟹子",
+            "玉米",
+            "山药泥",
+            "味付油扬",
+            "鸣门卷"
+          ],
+          "labelColor": "green"
+        }
       ]
     }
   ],
-
   "purchasingMaterials": [
     {
       "id": "drawer-divider",
@@ -479,9 +1116,24 @@
       "unit": "个",
       "suggestedQty": 6,
       "specs": [
-        {"name": "标准柜内尺寸", "length": 46, "width": 40, "height": 10},
-        {"name": "窄店星柜内尺寸", "length": 46, "width": 30, "height": 10},
-        {"name": "单个尺寸", "length": "24.3~38", "width": 14.7, "height": 9.5}
+        {
+          "name": "标准柜内尺寸",
+          "length": 46,
+          "width": 40,
+          "height": 10
+        },
+        {
+          "name": "窄店星柜内尺寸",
+          "length": 46,
+          "width": 30,
+          "height": 10
+        },
+        {
+          "name": "单个尺寸",
+          "length": "24.3~38",
+          "width": 14.7,
+          "height": 9.5
+        }
       ],
       "product": "可伸缩收纳盒抽屉分隔整理盒"
     },
@@ -494,8 +1146,18 @@
       "unit": "个",
       "suggestedQty": "根据门店实际情况",
       "specs": [
-        {"name": "吊柜内尺寸", "length": 90, "width": 31, "height": 60},
-        {"name": "单个尺寸", "length": "67-88", "width": 24, "height": 32}
+        {
+          "name": "吊柜内尺寸",
+          "length": 90,
+          "width": 31,
+          "height": 60
+        },
+        {
+          "name": "单个尺寸",
+          "length": "67-88",
+          "width": 24,
+          "height": 32
+        }
       ],
       "product": "太力衣柜隔板柜子行李整理置物架分层架子收纳神器"
     },
@@ -508,7 +1170,12 @@
       "unit": "个",
       "suggestedQty": "根据门店桌子实际数量",
       "specs": [
-        {"name": "柜内尺寸", "length": 52, "width": 30, "height": 7.5}
+        {
+          "name": "柜内尺寸",
+          "length": 52,
+          "width": 30,
+          "height": 7.5
+        }
       ],
       "product": "抽屉内分隔收纳盒可伸缩梳妆台化妆品厨房餐具桌面杂物分格整理盒"
     },
@@ -521,8 +1188,18 @@
       "unit": "个",
       "suggestedQty": "10个（正佳店）",
       "specs": [
-        {"name": "柜内尺寸", "length": 60, "height": 35, "depth": 60},
-        {"name": "单个尺寸", "length": 40.5, "width": 29, "height": 22}
+        {
+          "name": "柜内尺寸",
+          "length": 60,
+          "height": 35,
+          "depth": 60
+        },
+        {
+          "name": "单个尺寸",
+          "length": 40.5,
+          "width": 29,
+          "height": 22
+        }
       ],
       "product": "PP食品级加厚手提大号保鲜盒塑料透明长方形冰箱"
     },
@@ -535,8 +1212,18 @@
       "unit": "个",
       "suggestedQty": "12个（正佳店）",
       "specs": [
-        {"name": "标准柜内尺寸", "length": 260, "height": 32, "depth": 35},
-        {"name": "单个尺寸", "length": 40, "width": 27, "height": 22}
+        {
+          "name": "标准柜内尺寸",
+          "length": 260,
+          "height": 32,
+          "depth": 35
+        },
+        {
+          "name": "单个尺寸",
+          "length": 40,
+          "width": 27,
+          "height": 22
+        }
       ],
       "product": "塑料整理箱收纳箱"
     },
@@ -549,17 +1236,35 @@
       "unit": "套",
       "suggestedQty": "1",
       "specs": [
-        {"name": "尺寸", "length": 6, "height": 3},
-        {"name": "材质", "value": "PVC材质，带背胶"}
+        {
+          "name": "尺寸",
+          "length": 6,
+          "height": 3
+        },
+        {
+          "name": "材质",
+          "value": "PVC材质，带背胶"
+        }
       ],
       "colorSystem": [
-        {"color": "yellow", "usage": "一次性耗材（餐盒、盖子等）", "qty": 62},
-        {"color": "blue", "usage": "工具类", "qty": 35},
-        {"color": "green", "usage": "食品类", "qty": 34}
+        {
+          "color": "yellow",
+          "usage": "一次性耗材（餐盒、盖子等）",
+          "qty": 62
+        },
+        {
+          "color": "blue",
+          "usage": "工具类",
+          "qty": 35
+        },
+        {
+          "color": "green",
+          "usage": "食品类",
+          "qty": 34
+        }
       ]
     }
   ],
-
   "replenishFlow": {
     "description": "物料补货流转链路",
     "steps": [
@@ -569,10 +1274,18 @@
       "打包台上层抽屉库存不足时 → 从打包台下柜取货补充"
     ]
   },
-
   "labelColorSystem": {
-    "yellow": {"name": "黄色", "usage": "一次性耗材（餐盒、盖子等）"},
-    "blue": {"name": "蓝色", "usage": "工具类"},
-    "green": {"name": "绿色", "usage": "食品类"}
+    "yellow": {
+      "name": "黄色",
+      "usage": "一次性耗材（餐盒、盖子等）"
+    },
+    "blue": {
+      "name": "蓝色",
+      "usage": "工具类"
+    },
+    "green": {
+      "name": "绿色",
+      "usage": "食品类"
+    }
   }
 }
