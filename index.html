@@ -314,7 +314,7 @@
     font-weight: 600;
     color: var(--text);
     flex-shrink: 0;
-    word-break: break-all;
+    white-space: nowrap;
   }
   .placed-block-row-items {
     color: var(--text-muted);
@@ -627,8 +627,130 @@
   .doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:var(--text-muted);line-height:1.6;}
   .doc-footer-line{width:32px;height:1px;background:var(--border);margin:0 auto 8px;}
 
+  /* ===== Edit Mode ===== */
+  .edit-mode-btn { position: relative; }
+  .edit-mode-btn.active { background: var(--brand); color: #1A1A2E; }
+  .area-card-edit-btn {
+    position: absolute; top: 6px; right: 6px;
+    width: 24px; height: 24px; border-radius: 6px;
+    border: none; background: rgba(0,0,0,0.08); cursor: pointer;
+    font-size: 11px; display: none; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .area-card-edit-btn:hover { background: rgba(0,0,0,0.15); }
+  .edit-mode .area-card { position: relative; }
+  .edit-mode .area-card-edit-btn { display: flex; }
+  .add-area-btn {
+    width: 100%; padding: 10px; margin-top: 8px; border: 2px dashed var(--border);
+    border-radius: var(--radius); background: transparent; cursor: pointer;
+    font-size: 12px; color: var(--text-muted); display: none; transition: all 0.15s;
+  }
+  .add-area-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-light); }
+  .edit-mode .add-area-btn { display: block; }
+
   /* Edit modal */
-  
+  .edit-modal {
+    background: white; border-radius: 12px; width: 92%; max-width: 680px;
+    max-height: 88vh; display: flex; flex-direction: column; box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+  }
+  .edit-modal-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .edit-modal-header .edit-title { font-size: 15px; font-weight: 700; }
+  .edit-modal-header .edit-export-btns { display: flex; gap: 6px; }
+  .edit-modal-header .edit-export-btns button {
+    padding: 4px 10px; border: 1px solid var(--border); background: #FAF8F5;
+    border-radius: 6px; cursor: pointer; font-size: 11px; color: var(--text-muted);
+  }
+  .edit-modal-header .edit-export-btns button:hover { border-color: var(--brand); color: var(--brand); }
+  .edit-modal-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .edit-modal-footer {
+    padding: 12px 20px; border-top: 1px solid var(--border);
+    display: flex; gap: 8px; justify-content: space-between; background: #FAF8F5;
+  }
+
+  /* Edit form */
+  .ef-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .ef-label { font-size: 12px; font-weight: 600; color: var(--text-muted); min-width: 72px; flex-shrink: 0; }
+  .ef-input {
+    flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 12px; color: var(--text); outline: none; font-family: inherit;
+  }
+  .ef-input:focus { border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand-light); }
+  .ef-select {
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px;
+    font-size: 12px; color: var(--text); outline: none; background: white;
+  }
+  .ef-checkbox { width: 16px; height: 16px; accent-color: var(--brand); }
+
+  .ef-section { margin-top: 16px; margin-bottom: 8px; }
+  .ef-section-title {
+    font-size: 12px; font-weight: 700; color: var(--text); padding: 6px 0;
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 6px;
+  }
+  .ef-section-title button {
+    border: none; background: none; cursor: pointer; font-size: 14px; padding: 0 4px;
+    color: var(--text-muted); transition: transform 0.2s;
+  }
+  .ef-section-title button.collapsed { transform: rotate(-90deg); }
+  .ef-section-body { padding: 8px 0; }
+  .ef-section-body.collapsed-body { display: none; }
+
+  .ef-subarea {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 8px;
+  }
+  .ef-subarea-header {
+    display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+    font-size: 12px; font-weight: 600; color: var(--text);
+  }
+  .ef-subarea-header input.ef-input { font-weight: 600; }
+
+  .ef-category {
+    background: white; border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 10px; margin-bottom: 6px;
+  }
+  .ef-category-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .ef-color-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; cursor: pointer;
+    border: 2px solid white; box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+  }
+  .ef-category-header input.ef-input { flex: 1; }
+  .ef-items-list { padding-left: 16px; margin-bottom: 4px; }
+  .ef-item-row { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+  .ef-item-row input.ef-input { flex: 1; padding: 4px 8px; font-size: 11px; }
+  .ef-item-remove {
+    border: none; background: none; cursor: pointer; font-size: 13px; color: var(--red);
+    padding: 0 4px; opacity: 0.6;
+  }
+  .ef-item-remove:hover { opacity: 1; }
+  .ef-cat-remove {
+    border: none; background: none; cursor: pointer; font-size: 13px; color: var(--red);
+    padding: 0; opacity: 0.6;
+  }
+  .ef-cat-remove:hover { opacity: 1; }
+  .ef-add-btn {
+    border: 1px dashed var(--border); background: transparent; border-radius: 6px;
+    padding: 5px 10px; font-size: 11px; color: var(--text-muted); cursor: pointer;
+    width: 100%; margin-top: 4px;
+  }
+  .ef-add-btn:hover { border-color: var(--brand); color: var(--brand); background: var(--brand-light); }
+
+  .ef-chip-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .ef-chip {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 12px;
+    font-size: 11px; color: var(--text);
+  }
+  .ef-chip-remove {
+    border: none; background: none; cursor: pointer; font-size: 12px;
+    color: var(--red); padding: 0; line-height: 1;
+  }
+  .ef-color-select {
+    padding: 2px 6px; border: 1px solid var(--border); border-radius: 4px;
+    font-size: 10px; cursor: pointer; background: white;
+  }
 </style>
 </head>
 <body>
@@ -636,22 +758,25 @@
 <div class="header">
   <div style="display:flex;align-items:center;">
     <span class="header-logo">苍井寿司</span>
-    <span class="header-subtitle">门店物料定位工具 v1.2.1（门店端）</span>
+    <span class="header-subtitle">门店物料定位工具 v1.2.1</span>
   </div>
   <div class="header-actions">
-    <span id="lastUpdateTime" style="font-size:11px;color:rgba(255,255,255,0.7);margin-right:8px;"></span>
-    <button class="header-btn" onclick="refreshFromGitHub()" title="从GitHub刷新最新标准数据" id="refreshBtn">🔄 刷新数据</button>
-    <button class="header-btn warning" onclick="clearCache()" title="清除本地缓存并从GitHub重新加载">🗑️ 清除缓存</button>
-    <button class="header-btn" onclick="clearAll()">清空全部</button>
-    <button class="header-btn" onclick="savePlan()">保存方案</button>
-    <button class="header-btn primary" onclick="exportAll()">生成完整文档</button>
+    <button class="header-btn edit-mode-btn" id="editModeBtn" onclick="toggleEditMode()">⚙️ 编辑标准</button>
+    <button class="header-btn" onclick="clearAll()">🗑️ 清空</button>
+    <button class="header-btn" onclick="loadTemplate()">📋 模板</button>
+    <button class="header-btn" onclick="savePlan()">💾 保存</button>
+    <button class="header-btn" onclick="loadPlan()">📂 导入</button>
+    <button class="header-btn" onclick="saveStandards()">💾 保存标准</button>
+    <button class="header-btn" onclick="refreshFromGitHub()" title="从 GitHub 重新加载最新标准数据">🔄 刷新数据</button>
+    <button class="header-btn warning" onclick="clearCache()">🗑️ 清除缓存</button>
+    <button class="header-btn primary" onclick="exportAll()">📋 生成文档</button>
   </div>
 </div>
 
 <div class="main">
   <!-- LEFT: Area Library -->
   <div class="sidebar-left">
-    <div class="sidebar-title">区域模块库</div>
+    <div class="sidebar-title">📦 区域模块库</div>
     <div class="area-list" id="areaList"></div>
   </div>
 
@@ -671,7 +796,7 @@
          ondrop="onDropCanvas(event)">
       <div class="canvas-stage" id="canvasStage">
         <div class="canvas-placeholder" id="canvasPlaceholder">
-          <div class="canvas-placeholder-icon">🗺️</div>
+          <div class="canvas-placeholder-icon">🏪</div>
           <div class="canvas-placeholder-text">拖拽区域模块到此处</div>
           <div class="canvas-placeholder-sub">自由摆放 · 右下角拖拽调整大小</div>
         </div>
@@ -682,9 +807,9 @@
   <!-- RIGHT: Standards Panel -->
   <div class="sidebar-right">
     <div class="right-header">
-      <span>定位标准</span>
+      <span>📋 定位标准</span>
       <div class="right-actions">
-        <button class="right-btn" onclick="exportAreaDoc()">导出</button>
+        <button class="right-btn" onclick="exportAreaDoc()">📝 导出</button>
       </div>
     </div>
     <div class="right-content" id="rightContent">
@@ -697,19 +822,40 @@
   </div>
 </div>
 
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="edit-modal">
+    <div class="edit-modal-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="edit-title" id="editModalTitle">编辑区域</span>
+      </div>
+      <div class="edit-export-btns">
+        <button onclick="downloadStandardsJSON()" title="导出 standards.json">📥 JSON</button>
+        <button onclick="downloadUpdatedHTML()" title="导出完整 HTML">📥 HTML</button>
+        <button class="modal-close" onclick="closeEditor()" style="font-size:18px;">✕</button>
+      </div>
+    </div>
+    <div class="edit-modal-body" id="editModalBody"></div>
+    <div class="edit-modal-footer">
+      <button class="modal-btn" style="color:var(--red);" onclick="deleteCurrentArea()">🗑️ 删除此区域</button>
+      <button class="modal-btn primary" onclick="saveAreaEdit()">💾 保存修改</button>
+    </div>
+  </div>
+</div>
+
 <!-- Export Modal -->
 <div class="modal-overlay" id="exportModal">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title">门店物料定位标准文档</div>
-      <button class="modal-close" onclick="closeExportModal()">×</button>
+      <div class="modal-title">📋 门店物料定位标准文档</div>
+      <button class="modal-close" onclick="closeExportModal()">✕</button>
     </div>
     <div class="modal-body" id="exportBody"></div>
     <div class="modal-footer">
-      <button class="modal-btn" onclick="downloadHTML()">导出 HTML</button>
-      <button class="modal-btn" onclick="downloadWord()">导出 Word</button>
-      <button class="modal-btn" onclick="downloadCSV()">导出 CSV</button>
-      <button class="modal-btn primary" onclick="printDoc()">打印文档</button>
+      <button class="modal-btn" onclick="downloadHTML()">🌐 HTML</button>
+      <button class="modal-btn" onclick="downloadWord()">📝 Word</button>
+      <button class="modal-btn" onclick="downloadCSV()">📊 CSV</button>
+      <button class="modal-btn primary" onclick="printDoc()">🖨️ 打印</button>
     </div>
   </div>
 </div>
@@ -1312,9 +1458,11 @@ const BLOCK_CLASS_MAP = {
 const AREA_ICONS = {
   'cashier': '💳', 'sushi-display': '🏪', 'serving-window': '🔔',
   'packing-station': '📦', 'nigiri-workstation': '🍣', 'gunkan-workstation': '🍱',
-  'prep-workstation': '🍳', 'storage-shelf': '📚', 'rice-cooking': '🍚',
+  'prep-workstation': '🍳', 'storage-shelf': '🏭', 'rice-cooking': '🍚',
   'freezer': '❄️', 'upright-fridge': '🧊'
 };
+
+const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/RainG0106/store-positioning-tool/main';
 
 let standards = null;
 let placedAreas = []; // { id, x, y, w, h, cabinetCount, instanceId }
@@ -1324,57 +1472,58 @@ let dragBlockId = null;
 let areaInstanceCounters = {}; // { areaId: nextNum }
 
 // ============ INIT ============
-const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/RainG0106/store-positioning-tool/main';
-
 async function init() {
   console.log('[init] Starting...');
 
-  // 0. Show last update time
-  const lastUpdate = localStorage.getItem('store_standards_last_update');
-  const timeEl = document.getElementById('lastUpdateTime');
-  if (timeEl && lastUpdate) {
-    timeEl.textContent = '最后更新：' + lastUpdate;
-  }
-
-  // 1. Try localStorage cache first (avoids repeat network requests)
-  const cached = localStorage.getItem('store_standards_cache');
-  if (cached) {
+  // 编辑器优先保留本地编辑数据，避免每次加载覆盖用户修改
+  // （GitHub raw 有 CDN 缓存，可能返回旧数据）
+  const localData = localStorage.getItem('workbuddy_standards');
+  if (localData) {
     try {
-      standards = JSON.parse(cached);
-      console.log('[init] Loaded from localStorage cache, areas:', standards.areas?.length);
+      standards = JSON.parse(localData);
+      console.log('[init] Loaded from localStorage, areas:', standards.areas?.length);
       renderAreaList();
       updatePlaceholder();
-    } catch(e) { localStorage.removeItem('store_standards_cache'); }
+      if (typeof showToast === 'function') showToast('已加载本地编辑数据');
+      // 静默尝试从 GitHub 更新（不覆盖本地数据，只用于对比提示）
+      try {
+        const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now());
+        if (res.ok) {
+          const remoteData = await res.json();
+          const remoteUpdated = remoteData.lastUpdated || '';
+          const localUpdated = standards.lastUpdated || '';
+          if (remoteUpdated && remoteUpdated !== localUpdated) {
+            console.log('[init] GitHub 有新版本（' + remoteUpdated + '），本地版本（' + localUpdated + '），点击"刷新数据"可同步');
+          }
+        }
+      } catch(e) { /* ignore background fetch errors */ }
+      return;
+    } catch(e) {
+      console.warn('[init] localStorage parse failed, falling back');
+    }
   }
 
-  // 2. Fetch latest from GitHub (non-blocking, updates cache)
+  // 本地无数据：尝试从 GitHub 加载
   try {
     const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now());
     if (res.ok) {
-      const data = await res.json();
-      standards = data;
-      localStorage.setItem('store_standards_cache', JSON.stringify(data));
-
-      // Save update time
-      const now = new Date();
-      const timeStr = now.toLocaleString('zh-CN');
-      localStorage.setItem('store_standards_last_update', timeStr);
-      if (timeEl) timeEl.textContent = '最后更新：' + timeStr;
-
+      standards = await res.json();
+      localStorage.setItem('workbuddy_standards', JSON.stringify(standards, null, 2));
       console.log('[init] Loaded from GitHub, areas:', standards.areas?.length);
       renderAreaList();
       updatePlaceholder();
+      if (typeof showToast === 'function') showToast('已加载 GitHub 数据');
       return;
     }
   } catch(e) {
-    console.warn('[init] GitHub fetch failed, using cached/embedded data');
+    console.warn('[init] GitHub fetch failed:', e.message);
   }
 
-  // 3. Fall back to embedded JSON
+  // 最后回退到嵌入 JSON
   loadEmbeddedStandards();
   renderAreaList();
   updatePlaceholder();
-  console.log('[init] Done (embedded). Areas:', standards.areas?.length);
+  console.log('[init] Done. Areas rendered:', standards.areas?.length);
 }
 
 function loadEmbeddedStandards() {
@@ -1409,7 +1558,17 @@ function getFallbackStandards() {
 }
 
 // ============ LEFT: Area List ============
-let editingAreaId = null; // removed in store version
+let editMode = false;
+let editingAreaId = null; // areaId being edited, null = new area
+
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode', editMode);
+  const btn = document.getElementById('editModeBtn');
+  btn.textContent = editMode ? '✅ 完成编辑' : '⚙️ 编辑标准';
+  btn.classList.toggle('active', editMode);
+  renderAreaList();
+}
 
 function renderAreaList() {
   const el = document.getElementById('areaList');
@@ -1429,6 +1588,7 @@ function renderAreaList() {
     card.draggable = true;
     card.dataset.areaId = area.id;
     card.innerHTML = `
+      <button class="area-card-edit-btn" onclick="event.stopPropagation();openEditor('${area.id}')" title="编辑此区域">✏️</button>
       <div class="area-card-name">${AREA_ICONS[area.id] || ''} ${area.name}</div>
       <div class="area-card-desc">${area.description || ''}</div>
       <div class="area-card-tags">${tag}</div>
@@ -1445,9 +1605,17 @@ function renderAreaList() {
     });
     el.appendChild(card);
   });
+  // Add "new area" button in edit mode
+  if (editMode) {
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-area-btn';
+    addBtn.textContent = '＋ 新增区域模块';
+    addBtn.onclick = () => openEditor(null);
+    el.appendChild(addBtn);
+  }
 }
 
-// ============ CANVAS: Drop =============
+// ============ CANVAS: Drop ============
 function onDragOverCanvas(e) {
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
@@ -1466,7 +1634,7 @@ function onDropCanvas(e) {
   if (!areaData) return;
   const storeType = document.getElementById('storeType').value;
   if (areaData.storeType === '商场铺' && storeType !== 'mall') {
-    showToast('寿司展示柜仅适用于商场铺'); return;
+    showToast('⚠️ 寿司展示柜仅适用于商场铺'); return;
   }
 
   const stage = document.getElementById('canvasStage');
@@ -1491,7 +1659,7 @@ function onDropCanvas(e) {
   selectBlock(instId);
   updatePlaceholder();
   updateToolbar();
-  showToast(`? 已添加「${areaData.name} #${areaInstanceCounters[areaId]}」`);
+  showToast(`✅ 已添加「${areaData.name} #${areaInstanceCounters[areaId]}」`);
 }
 
 function getDefaultCabinet(area) {
@@ -1630,18 +1798,18 @@ function buildBlockBodyHTML(areaData, block) {
 
   // Section 1: 设备
   if (tools.length) {
-    html += `<div class="placed-block-subtitle">设备</div>`;
+    html += `<div class="placed-block-subtitle">🔧 设备</div>`;
     html += `<div class="placed-block-equip">${tools.map(e => `<span class="placed-block-chip">${e}</span>`).join('')}</div>`;
   }
 
   // Section 2: 陈列产品 (displayOrder)
   if (displays.length) {
-    html += `<div class="placed-block-subtitle">陈列产品</div>`;
+    html += `<div class="placed-block-subtitle">🍣 陈列产品</div>`;
     html += `<div style="display:flex;flex-direction:column;gap:2px;">`;
     displays.forEach(m => {
       html += `<div class="placed-block-row" style="font-size:10px;">
         <div class="placed-block-dot dot-yellow"></div>
-        <div class="placed-block-row-items" style="word-break:break-all;">${m}</div>
+        <div class="placed-block-row-items" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m}</div>
       </div>`;
     });
     html += `</div>`;
@@ -1649,12 +1817,12 @@ function buildBlockBodyHTML(areaData, block) {
 
   // Section 3: 存放物料
   if (materials.length) {
-    html += `<div class="placed-block-subtitle">存放物料</div>`;
+    html += `<div class="placed-block-subtitle">📦 存放物料</div>`;
     html += `<div style="display:flex;flex-direction:column;gap:2px;">`;
     materials.forEach(m => {
       html += `<div class="placed-block-row" style="font-size:10px;">
         <div class="placed-block-dot dot-green"></div>
-        <div class="placed-block-row-items" style="word-break:break-all;">${m}</div>
+        <div class="placed-block-row-items" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${m}</div>
       </div>`;
     });
     html += `</div>`;
@@ -1663,7 +1831,7 @@ function buildBlockBodyHTML(areaData, block) {
   // Fallback: always show something
   if (!html) {
     if (areaData.equipment && areaData.equipment.length) {
-      html += `<div class="placed-block-subtitle">设备</div>`;
+      html += `<div class="placed-block-subtitle">🔧 设备</div>`;
       html += `<div class="placed-block-equip">${areaData.equipment.map(e => `<span class="placed-block-chip">${e}</span>`).join('')}</div>`;
     } else {
       html += `<div style="font-size:10px;color:var(--text-muted);padding-top:8px;text-align:center;">暂无详细数据</div>`;
@@ -1699,7 +1867,7 @@ function renderBlockOnCanvas(instId) {
       <span>${blockTitle}</span>
       <div style="display:flex;align-items:center;gap:6px;">
         <span class="placed-block-num">#${block.num}</span>
-        <button class="placed-block-remove" onclick="event.stopPropagation();removeBlock('${instId}')">×</button>
+        <button class="placed-block-remove" onclick="event.stopPropagation();removeBlock('${instId}')">✕</button>
       </div>
     </div>
     <div class="placed-block-body" style="flex:1;overflow:auto;">${bodyHTML}</div>
@@ -1885,7 +2053,7 @@ function renderRightPanel() {
   // Equipment
   if (area.equipment && area.equipment.length) {
     html += `<div class="std-section">
-      <div class="std-subtitle">设备清单</div>
+      <div class="std-subtitle">🔧 设备清单</div>
       <div>${area.equipment.map(e => `<span class="std-chip">${e}</span>`).join('')}</div>
     </div>`;
   }
@@ -1893,7 +2061,7 @@ function renderRightPanel() {
   // Cabinet config
   if (block.cabinetCount && Object.keys(block.cabinetCount).length) {
     html += `<div class="std-section">
-      <div class="std-subtitle">柜子数量设置</div>`;
+      <div class="std-subtitle">⚙️ 柜子数量设置</div>`;
     const labels = { upper: '上层抽屉', lower: '下层柜', bottom: '底部柜', racks: '货架组' };
     for (const [key, val] of Object.entries(block.cabinetCount)) {
       html += `<div class="std-input-row">
@@ -1910,12 +2078,12 @@ function renderRightPanel() {
   if (area.subAreas) {
     area.subAreas.forEach(sub => {
       html += `<div class="std-section">`;
-      html += `<div class="std-subtitle">${sub.name}</div>`;
+      html += `<div class="std-subtitle">📂 ${sub.name}</div>`;
 
       if (sub.type === 'sop') {
         if (sub.notices) {
           html += `<div class="std-warning">`;
-          sub.notices.forEach(n => html += `? ${n}<br>`);
+          sub.notices.forEach(n => html += `• ${n}<br>`);
           html += `</div>`;
         }
         html += `<div class="std-list">`;
@@ -1943,11 +2111,11 @@ function renderRightPanel() {
         html += `</table>`;
       }
 
-      if (sub.temperature) html += `<div style="font-size:11px;color:var(--blue);margin-top:6px;">温度：${sub.temperature}</div>`;
+      if (sub.temperature) html += `<div style="font-size:11px;color:var(--blue);margin-top:6px;">🌡️ ${sub.temperature}</div>`;
       if (sub.warning) html += `<div class="std-warning" style="margin-top:6px;">⚠️ ${sub.warning}</div>`;
       if (sub.standards) {
         html += `<div class="std-note" style="margin-top:6px;">`;
-        sub.standards.forEach(s => html += `? ${s}<br>`);
+        sub.standards.forEach(s => html += `• ${s}<br>`);
         html += `</div>`;
       }
       if (sub.cabinetRequirements) {
@@ -1960,7 +2128,7 @@ function renderRightPanel() {
       }
       if (sub.containerSuggestion) {
         const c = sub.containerSuggestion;
-        html += `<div class="std-note">📝 建议容器：${c.name}（${c.size}），单价${c.price}，建议${c.suggestedQty}</div>`;
+        html += `<div class="std-note">📦 建议容器：${c.name}（${c.size}），单价${c.price}，建议${c.suggestedQty}</div>`;
       }
       html += `</div>`;
     });
@@ -1995,7 +2163,7 @@ function updateCabinet(instId, key, value) {
 
 // ============ EXPORT ALL ============
 function exportAll() {
-  if (!placedAreas.length) { showToast('画布为空'); return; }
+  if (!placedAreas.length) { showToast('⚠️ 画布为空'); return; }
   const storeName = document.getElementById('storeName').value || '苍井寿司门店';
   const html = buildDocHTML(storeName);
   document.getElementById('exportBody').innerHTML = html;
@@ -2362,7 +2530,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;max-w
   const a = document.createElement('a');
   a.href = url; a.download = `${storeName}_物料定位标准.html`; a.click();
   URL.revokeObjectURL(url);
-  showToast('? HTML已导出');
+  showToast('✅ HTML已导出');
 }
 
 function downloadWord() {
@@ -2424,7 +2592,7 @@ body{font-family:'微软雅黑','Microsoft YaHei','PingFang SC',sans-serif;max-w
   const a = document.createElement('a');
   a.href = url; a.download = `${storeName}_物料定位标准.doc`; a.click();
   URL.revokeObjectURL(url);
-  showToast('? Word已导出');
+  showToast('✅ Word已导出');
 }
 
 function downloadCSV() {
@@ -2448,7 +2616,7 @@ function downloadCSV() {
   const a = document.createElement('a');
   a.href = url; a.download = `${storeName}_物料定位标准.csv`; a.click();
   URL.revokeObjectURL(url);
-  showToast('? CSV已导出');
+  showToast('✅ CSV已导出');
 }
 
 function printDoc() {
@@ -2460,56 +2628,8 @@ function printDoc() {
 }
 
 function exportAreaDoc() {
-  if (!selectedId) { showToast('先点击选择一个区域'); return; }
+  if (!selectedId) { showToast('⚠️ 先点击选择一个区域'); return; }
   exportAll(); // Just export all for now
-}
-
-// ============ REFRESH FROM GITHUB ============
-async function refreshFromGitHub() {
-  const btn = document.getElementById('refreshBtn');
-  const originalText = btn.textContent;
-  btn.textContent = '⏳ 刷新中...';
-  btn.disabled = true;
-
-  try {
-    // 使用 API 端点（无 CDN 缓存），正确解码 base64 内容
-    // 注意：不能加 Cache-Control header，否则 CORS 预检失败；用 ?t=timestamp 绕过浏览器缓存即可
-    const res = await fetch('https://api.github.com/repos/RainG0106/store-positioning-tool/contents/standards.json?t=' + Date.now(), {
-      headers: { 'User-Agent': 'store-tool' }
-    });
-    if (res.ok) {
-      const data = await res.json();
-      // GitHub API 返回 base64 编码的 content，需解码
-      const raw = atob(data.content.replace(/\s/g, ''));
-      const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
-      const text = new TextDecoder().decode(bytes);
-      const parsed = JSON.parse(text);
-      standards = parsed;
-      localStorage.setItem('store_standards_cache', JSON.stringify(parsed));
-
-      // Save update time
-      const now = new Date();
-      const timeStr = now.toLocaleString('zh-CN');
-      localStorage.setItem('store_standards_last_update', timeStr);
-
-      renderAreaList();
-      updatePlaceholder();
-
-      // Update time display
-      const timeEl = document.getElementById('lastUpdateTime');
-      if (timeEl) timeEl.textContent = '最后更新：' + timeStr;
-
-      showToast('✅ 数据已刷新（' + timeStr + '）');
-    } else {
-      throw new Error('HTTP ' + res.status);
-    }
-  } catch(e) {
-    console.warn('[refresh] GitHub fetch failed', e);
-    showToast('❌ 刷新失败，请检查网络连接');
-  } finally {
-    btn.textContent = originalText;
-    btn.disabled = false;
-  }
 }
 
 // ============ UTILS ============
@@ -2521,39 +2641,13 @@ function clearAll() {
   areaInstanceCounters = {};
   document.getElementById('canvasStage').innerHTML = `
     <div class="canvas-placeholder" id="canvasPlaceholder">
-      <div class="canvas-placeholder-icon">🗺️</div>
+      <div class="canvas-placeholder-icon">🏪</div>
       <div class="canvas-placeholder-text">拖拽区域模块到此处</div>
       <div class="canvas-placeholder-sub">自由摆放 · 右下角拖拽调整大小</div>
     </div>`;
   renderRightPanel();
   updateToolbar();
   showToast('🗑️ 已清空');
-}
-
-async function clearCache() {
-  if (!confirm('确定清除本地缓存并重新从 GitHub 加载最新数据吗？\n\n清除后将从 GitHub 重新获取标准数据。')) return;
-  localStorage.removeItem('store_standards_cache');
-  localStorage.removeItem('store_standards_last_update');
-  showToast('⏳ 正在从 GitHub 拉取最新数据...');
-
-  // 立即强制拉取最新数据，而不是靠 reload 时的 fetch（可能被 CDN 缓存）
-  try {
-    const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now() + '&_=' + Math.random());
-    if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem('store_standards_cache', JSON.stringify(data));
-      const timeStr = new Date().toLocaleString('zh-CN');
-      localStorage.setItem('store_standards_last_update', timeStr);
-      showToast('✅ 已获取最新数据，正在刷新...');
-      setTimeout(() => location.reload(), 300);
-      return;
-    }
-  } catch (e) {
-    console.warn('[clearCache] Fetch failed:', e);
-  }
-
-  showToast('⚠️ GitHub 拉取失败，将使用内置数据并刷新...');
-  setTimeout(() => location.reload(), 800);
 }
 
 function savePlan() {
@@ -2573,10 +2667,82 @@ function savePlan() {
   const a = document.createElement('a');
   a.href = url; a.download = `门店布局_${config.storeName||'未命名'}.json`; a.click();
   URL.revokeObjectURL(url);
-  showToast('方案已保存');
+  showToast('💾 方案已保存');
 }
 
+function loadPlan() {
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = '.json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const config = JSON.parse(ev.target.result);
+        document.getElementById('storeName').value = config.storeName || '';
+        document.getElementById('storeType').value = config.storeType || 'standard';
+        // Clear current
+        document.getElementById('canvasStage').innerHTML = `
+          <div class="canvas-placeholder" id="canvasPlaceholder" style="display:none;"></div>`;
+        placedAreas = [];
+        areaInstanceCounters = config.areaInstanceCounters || {};
 
+        if (config.placedAreas) {
+          config.placedAreas.forEach(pa => {
+            const areaData = standards.areas.find(a => a.id === pa.id);
+            if (!areaData) return;
+            const instId = 'block-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+            placedAreas.push({
+              id: pa.id, instanceId: instId,
+              x: pa.x || 0, y: pa.y || 0,
+              w: pa.w || 200, h: pa.h || 160,
+              num: pa.num || ((areaInstanceCounters[pa.id] || 0) + 1),
+              cabinetCount: pa.cabinetCount || getDefaultCabinet(areaData)
+            });
+            renderBlockOnCanvas(instId);
+          });
+        }
+        updatePlaceholder();
+        updateToolbar();
+        selectedId = null;
+        renderRightPanel();
+        showToast('📂 方案已导入');
+      } catch(err) { showToast('❌ 格式错误'); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function loadTemplate() {
+  if (placedAreas.length && !confirm('加载模板将替换当前内容？')) return;
+  clearAll();
+  document.getElementById('storeName').value = '苍井寿司·XX店';
+  document.getElementById('storeType').value = 'mall';
+
+  const ids = ['cashier','sushi-display','serving-window','packing-station',
+               'nigiri-workstation','gunkan-workstation','storage-shelf',
+               'rice-cooking','freezer'];
+  ids.forEach((id, i) => {
+    const areaData = standards.areas.find(a => a.id === id);
+    if (!areaData) return;
+    const instId = 'block-' + Date.now() + '-' + i;
+    const x = (i % 4) * 220 + 20;
+    const y = Math.floor(i / 4) * 140 + 20;
+    areaInstanceCounters[id] = (areaInstanceCounters[id] || 0) + 1;
+    placedAreas.push({
+      id, instanceId: instId, x, y,
+      w: 200, h: 160,
+      num: areaInstanceCounters[id],
+      cabinetCount: getDefaultCabinet(areaData)
+    });
+    renderBlockOnCanvas(instId);
+  });
+  updatePlaceholder();
+  updateToolbar();
+  showToast('📋 已加载商场铺模板');
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -2584,6 +2750,669 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// ============ EDIT MODE ============
+const COLOR_MAP = { yellow: '#F5A623', blue: '#1A6FBA', green: '#7CB342' };
+const COLOR_LABELS = { yellow: '黄色·耗材', blue: '蓝色·工具', green: '绿色·食品' };
+const SUBAREA_TYPES = [
+  { value: 'storage', label: '储存区' },
+  { value: 'display', label: '陈列展示' },
+  { value: 'desktop', label: '操作台桌面' },
+  { value: 'fridge', label: '冰箱' },
+  { value: 'shelf', label: '层架' },
+  { value: 'drawers', label: '抽屉' },
+  { value: 'cabinet', label: '柜子' },
+  { value: 'sop', label: 'SOP流程' },
+  { value: 'fridge-compartment', label: '冰箱分层' }
+];
+
+function openEditor(areaId) {
+  editingAreaId = areaId;
+  const isNew = !areaId;
+  const area = isNew ? { id: '', name: '', description: '', required: false, icon: '📦', equipment: [], subAreas: [], positioningRules: [] } :
+    standards.areas.find(a => a.id === areaId);
+  if (!area && !isNew) return;
+
+  // For new areas, temporarily add to standards so getEditingArea() can find it
+  if (isNew) {
+    standards.areas.push(area);
+    editingAreaId = ''; // marker for new area
+  }
+
+  document.getElementById('editModalTitle').textContent = isNew ? '新增区域模块' : `编辑区域：${area.name}`;
+  document.getElementById('editModalBody').innerHTML = renderEditForm(area);
+  document.getElementById('editModal').classList.add('active');
+}
+
+function closeEditor() {
+  // If this was a new area that wasn't saved, remove the temporary entry
+  if (editingAreaId === '') {
+    standards.areas.pop();
+  }
+  document.getElementById('editModal').classList.remove('active');
+  editingAreaId = null;
+}
+
+function renderEditForm(area) {
+  const isNew = !area.id;
+  let h = '';
+
+  // Basic info
+  h += `<div class="ef-row">
+    <span class="ef-label">区域名称</span>
+    <input class="ef-input" id="ef-name" value="${esc(area.name)}" placeholder="如：收银机区域">
+  </div>`;
+  h += `<div class="ef-row">
+    <span class="ef-label">区域ID</span>
+    <input class="ef-input" id="ef-id" value="${esc(area.id)}" placeholder="英文ID如 cashier" ${!isNew ? 'readonly style="background:#f5f5f5;"' : ''}>
+  </div>`;
+  h += `<div class="ef-row">
+    <span class="ef-label">描述</span>
+    <input class="ef-input" id="ef-desc" value="${esc(area.description || '')}" placeholder="简短描述">
+  </div>`;
+  h += `<div class="ef-row">
+    <span class="ef-label">图标</span>
+    <input class="ef-input" id="ef-icon" value="${esc(area.icon || AREA_ICONS[area.id] || '📦')}" placeholder="emoji图标" style="max-width:80px;">
+  </div>`;
+  h += `<div class="ef-row">
+    <label><input type="checkbox" class="ef-checkbox" id="ef-required" ${area.required ? 'checked' : ''}> 必配区域</label>
+    ${area.storeType === '商场铺' ? '<label style="margin-left:12px;"><input type="checkbox" class="ef-checkbox" id="ef-mall" checked> 仅商场铺</label>' : '<label style="margin-left:12px;"><input type="checkbox" class="ef-checkbox" id="ef-mall"> 仅商场铺</label>'}
+  </div>`;
+
+  // Equipment
+  h += `<div class="ef-section">
+    <div class="ef-section-title">🔧 设备列表</div>
+    <div class="ef-section-body" id="ef-equip-section">
+      <div class="ef-chip-row" id="ef-equip-chips"></div>
+      <div style="display:flex;gap:4px;margin-top:6px;">
+        <input class="ef-input" id="ef-equip-input" placeholder="输入设备名称后回车添加" style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();addEquip();}">
+        <button class="ef-add-btn" style="width:auto;padding:4px 12px;" onclick="addEquip()">添加</button>
+      </div>
+    </div>
+  </div>`;
+
+  // Sub-areas
+  h += `<div class="ef-section">
+    <div class="ef-section-title">📁 子区域 / 模块</div>
+    <div class="ef-section-body" id="ef-subareas-container"></div>
+    <button class="ef-add-btn" onclick="addSubArea()">＋ 添加子区域</button>
+  </div>`;
+
+  // Positioning rules / notes
+  h += `<div class="ef-section">
+    <div class="ef-section-title">📌 定位规则</div>
+    <div class="ef-section-body" id="ef-rules-section">
+      <div id="ef-rules-list"></div>
+      <div style="display:flex;gap:4px;margin-top:4px;">
+        <input class="ef-input" id="ef-rule-input" placeholder="输入定位规则后回车添加" style="flex:1;" onkeydown="if(event.key==='Enter'){event.preventDefault();addRule();}">
+        <button class="ef-add-btn" style="width:auto;padding:4px 12px;" onclick="addRule()">添加</button>
+      </div>
+    </div>
+  </div>`;
+
+  return h;
+}
+
+function esc(s) { return String(s || '').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+
+// After modal opens, populate dynamic content
+const editModalObserver = new MutationObserver(() => {
+  const modal = document.getElementById('editModal');
+  if (modal.classList.contains('active')) populateEditForm();
+});
+editModalObserver.observe(document.getElementById('editModal'), { attributes: true, attributeFilter: ['class'] });
+
+function populateEditForm() {
+  const area = editingAreaId ?
+    standards.areas.find(a => a.id === editingAreaId) :
+    { id: '', name: '', description: '', required: false, icon: '📦', equipment: [], subAreas: [], positioningRules: [] };
+  if (!area) return;
+
+  // Equipment chips
+  const chips = document.getElementById('ef-equip-chips');
+  if (chips && area.equipment) {
+    chips.innerHTML = area.equipment.map((eq, i) =>
+      `<span class="ef-chip">${esc(eq)}<button class="ef-chip-remove" onclick="removeEquip(${i})">×</button></span>`
+    ).join('');
+  }
+
+  // Sub-areas
+  const container = document.getElementById('ef-subareas-container');
+  if (container && area.subAreas) {
+    container.innerHTML = area.subAreas.map((sub, i) => renderSubAreaEditor(sub, i)).join('');
+  }
+
+  // Rules
+  const rules = document.getElementById('ef-rules-list');
+  const rulesArr = area.positioningRules || [];
+  if (rules) {
+    rules.innerHTML = rulesArr.map((r, i) =>
+      `<div class="ef-item-row"><input class="ef-input" value="${esc(r)}" onchange="updateRule(${i},this.value)"><button class="ef-item-remove" onclick="removeRule(${i})">×</button></div>`
+    ).join('');
+  }
+}
+
+function renderSubAreaEditor(sub, idx) {
+  const color = sub.type === 'fridge' || sub.type === 'fridge-compartment' ? 'blue' :
+    sub.type === 'shelf' ? 'olive' : 'brand';
+  let h = `<div class="ef-subarea" data-sub-idx="${idx}">`;
+  h += `<div class="ef-subarea-header">
+    <input class="ef-input" value="${esc(sub.name || '')}" onchange="updateSubField(${idx},'name',this.value)" placeholder="子区域名称" style="flex:1;font-weight:600;">
+    <select class="ef-select" onchange="updateSubField(${idx},'type',this.value)">
+      ${SUBAREA_TYPES.map(t => `<option value="${t.value}" ${sub.type === t.value ? 'selected' : ''}>${t.label}</option>`).join('')}
+    </select>
+    <button class="ef-item-remove" onclick="removeSubArea(${idx})" title="删除子区域">×</button>
+  </div>`;
+
+  // Storage mode
+  if (sub.storageMode) {
+    h += `<div class="ef-row" style="margin-bottom:6px;">
+      <span class="ef-label" style="min-width:56px;font-size:11px;">存放模式</span>
+      <input class="ef-input" value="${esc(sub.storageMode)}" onchange="updateSubField(${idx},'storageMode',this.value)" style="flex:1;">
+    </div>`;
+  }
+  if (sub.storageRule) {
+    h += `<div class="ef-row" style="margin-bottom:6px;">
+      <span class="ef-label" style="min-width:56px;font-size:11px;">存放规则</span>
+      <input class="ef-input" value="${esc(sub.storageRule)}" onchange="updateSubField(${idx},'storageRule',this.value)" style="flex:1;">
+    </div>`;
+  }
+  if (sub.temperature) {
+    h += `<div class="ef-row" style="margin-bottom:6px;">
+      <span class="ef-label" style="min-width:56px;font-size:11px;">温度</span>
+      <input class="ef-input" value="${esc(sub.temperature)}" onchange="updateSubField(${idx},'temperature',this.value)" style="flex:1;">
+    </div>`;
+  }
+  if (sub.shelfLevels) {
+    h += `<div class="ef-row" style="margin-bottom:6px;">
+      <span class="ef-label" style="min-width:56px;font-size:11px;">层数</span>
+      <input class="ef-input" value="${esc(String(sub.shelfLevels))}" onchange="updateSubField(${idx},'shelfLevels',this.value)" style="flex:1;">
+    </div>`;
+  }
+
+  // Drawers
+  if (sub.drawers) {
+    h += `<div style="margin:6px 0;font-size:11px;font-weight:600;color:var(--text-muted);">抽屉列表</div>`;
+    sub.drawers.forEach((d, di) => {
+      h += `<div style="background:white;border:1px solid var(--border);border-radius:6px;padding:6px 8px;margin-bottom:4px;">
+        <div class="ef-row" style="margin-bottom:4px;">
+          <span class="ef-label" style="min-width:36px;font-size:10px;">位置</span>
+          <input class="ef-input" type="number" value="${d.position}" onchange="updateDrawer(${idx},${di},'position',+this.value)" style="width:50px;flex:none;">
+          <span class="ef-label" style="min-width:36px;font-size:10px;">名称</span>
+          <input class="ef-input" value="${esc(d.name)}" onchange="updateDrawer(${idx},${di},'name',this.value)">
+          <select class="ef-color-select" onchange="updateDrawer(${idx},${di},'labelColor',this.value)">
+            ${Object.entries(COLOR_LABELS).map(([k,v]) => `<option value="${k}" ${d.labelColor===k?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div class="ef-row" style="margin-bottom:2px;">
+          <span class="ef-label" style="min-width:36px;font-size:10px;">物料</span>
+          <input class="ef-input" value="${esc(d.items.join('、'))}" onchange="updateDrawerItems(${idx},${di},this.value)" placeholder="用顿号分隔">
+        </div>
+        ${d.partition ? `<div class="ef-row" style="margin-bottom:2px;">
+          <span class="ef-label" style="min-width:36px;font-size:10px;">隔栏</span>
+          <input class="ef-input" value="${esc(d.partition)}" onchange="updateDrawer(${idx},${di},'partition',this.value)">
+        </div>` : ''}
+      </div>`;
+    });
+    h += `<button class="ef-add-btn" onclick="addDrawer(${idx})">＋ 添加抽屉</button>`;
+  }
+
+  // Items (categories)
+  if (sub.items && sub.items.length) {
+    h += `<div style="margin:6px 0;font-size:11px;font-weight:600;color:var(--text-muted);">物料分类</div>`;
+    sub.items.forEach((cat, ci) => {
+      h += `<div class="ef-category">
+        <div class="ef-category-header">
+          <div class="ef-color-dot" style="background:${COLOR_MAP[cat.labelColor] || '#ccc'};" title="${COLOR_LABELS[cat.labelColor] || ''}"></div>
+          <input class="ef-input" value="${esc(cat.category)}" onchange="updateCatField(${idx},${ci},'category',this.value)" placeholder="分类名">
+          <select class="ef-color-select" onchange="updateCatField(${idx},${ci},'labelColor',this.value)">
+            ${Object.entries(COLOR_LABELS).map(([k,v]) => `<option value="${k}" ${cat.labelColor===k?'selected':''}>${v}</option>`).join('')}
+          </select>
+          <button class="ef-cat-remove" onclick="removeCategory(${idx},${ci})" title="删除分类">×</button>
+        </div>`;
+      if (cat.level !== undefined) {
+        h += `<div class="ef-row" style="margin-bottom:2px;">
+          <span class="ef-label" style="min-width:36px;font-size:10px;">层级</span>
+          <input class="ef-input" type="number" value="${cat.level}" onchange="updateCatField(${idx},${ci},'level',+this.value)" style="width:50px;flex:none;">
+        </div>`;
+      }
+      cat.items.forEach((item, ii) => {
+        h += `<div class="ef-item-row">
+          <input class="ef-input" value="${esc(item)}" onchange="updateItem(${idx},${ci},${ii},this.value)">
+          <button class="ef-item-remove" onclick="removeItem(${idx},${ci},${ii})">×</button>
+        </div>`;
+      });
+      h += `<div class="ef-item-row">
+        <input class="ef-input" id="ef-newitem-${idx}-${ci}" placeholder="输入物料名后回车添加" onkeydown="if(event.key==='Enter'){event.preventDefault();addItem(${idx},${ci});}">
+        <button class="ef-add-btn" style="width:auto;padding:3px 8px;" onclick="addItem(${idx},${ci})">＋</button>
+      </div>`;
+      h += `</div>`;
+    });
+    h += `<button class="ef-add-btn" onclick="addCategory(${idx})">＋ 添加物料分类</button>`;
+  }
+
+  // Standards / notices
+  if (sub.standards && Array.isArray(sub.standards)) {
+    h += `<div style="margin:6px 0;font-size:11px;font-weight:600;color:var(--text-muted);">标准规范</div>`;
+    sub.standards.forEach((s, si) => {
+      h += `<div class="ef-item-row">
+        <input class="ef-input" value="${esc(s)}" onchange="updateStandard(${idx},${si},this.value)">
+        <button class="ef-item-remove" onclick="removeStandard(${idx},${si})">×</button>
+      </div>`;
+    });
+    h += `<div class="ef-item-row">
+      <input class="ef-input" id="ef-std-new-${idx}" placeholder="输入标准后回车添加" onkeydown="if(event.key==='Enter'){event.preventDefault();addStandard(${idx});}">
+      <button class="ef-add-btn" style="width:auto;padding:3px 8px;" onclick="addStandard(${idx})">＋</button>
+    </div>`;
+  }
+
+  // Warning
+  if (sub.warning) {
+    h += `<div class="ef-row" style="margin-top:6px;">
+      <span class="ef-label" style="min-width:56px;font-size:11px;">⚠️ 警告</span>
+      <input class="ef-input" value="${esc(sub.warning)}" onchange="updateSubField(${idx},'warning',this.value)" style="flex:1;">
+    </div>`;
+  }
+
+  h += `</div>`;
+  return h;
+}
+
+// ---- Equipment functions ----
+function addEquip() {
+  const input = document.getElementById('ef-equip-input');
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  const area = getEditingArea();
+  if (!area.equipment) area.equipment = [];
+  area.equipment.push(val);
+  refreshEquipChips(area);
+}
+function removeEquip(i) {
+  const area = getEditingArea();
+  area.equipment.splice(i, 1);
+  refreshEquipChips(area);
+}
+function refreshEquipChips(area) {
+  const chips = document.getElementById('ef-equip-chips');
+  chips.innerHTML = area.equipment.map((eq, i) =>
+    `<span class="ef-chip">${esc(eq)}<button class="ef-chip-remove" onclick="removeEquip(${i})">×</button></span>`
+  ).join('');
+}
+
+// ---- Rules functions ----
+function addRule() {
+  const input = document.getElementById('ef-rule-input');
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  const area = getEditingArea();
+  if (!area.positioningRules) area.positioningRules = [];
+  area.positioningRules.push(val);
+  refreshRules(area);
+}
+function updateRule(i, val) { getEditingArea().positioningRules[i] = val; }
+function removeRule(i) {
+  const area = getEditingArea();
+  area.positioningRules.splice(i, 1);
+  refreshRules(area);
+}
+function refreshRules(area) {
+  const el = document.getElementById('ef-rules-list');
+  el.innerHTML = (area.positioningRules || []).map((r, i) =>
+    `<div class="ef-item-row"><input class="ef-input" value="${esc(r)}" onchange="updateRule(${i},this.value)"><button class="ef-item-remove" onclick="removeRule(${i})">×</button></div>`
+  ).join('');
+}
+
+// ---- Sub-area functions ----
+function getEditingArea() {
+  if (editingAreaId) return standards.areas.find(a => a.id === editingAreaId);
+  // For new areas, we temporarily add to standards
+  return standards.areas[standards.areas.length - 1];
+}
+function getSubArea(idx) { return getEditingArea().subAreas[idx]; }
+
+function updateSubField(idx, field, value) {
+  const sub = getSubArea(idx);
+  sub[field] = field === 'shelfLevels' ? value : value;
+}
+function removeSubArea(idx) {
+  getEditingArea().subAreas.splice(idx, 1);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((sub, i) => renderSubAreaEditor(sub, i)).join('');
+}
+function addSubArea() {
+  const area = getEditingArea();
+  if (!area.subAreas) area.subAreas = [];
+  area.subAreas.push({
+    id: 'new-' + Date.now(),
+    name: '新子区域',
+    type: 'storage',
+    items: []
+  });
+  document.getElementById('ef-subareas-container').innerHTML =
+    area.subAreas.map((sub, i) => renderSubAreaEditor(sub, i)).join('');
+}
+
+// ---- Drawer functions ----
+function updateDrawer(subIdx, drawerIdx, field, value) {
+  getSubArea(subIdx).drawers[drawerIdx][field] = value;
+}
+function updateDrawerItems(subIdx, drawerIdx, value) {
+  getSubArea(subIdx).drawers[drawerIdx].items = value.split(/[、,，]/).map(s => s.trim()).filter(Boolean);
+}
+function addDrawer(subIdx) {
+  const sub = getSubArea(subIdx);
+  if (!sub.drawers) sub.drawers = [];
+  sub.drawers.push({ position: sub.drawers.length + 1, name: '新抽屉', items: [], labelColor: 'yellow' });
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+
+// ---- Category / Item functions ----
+function updateCatField(subIdx, catIdx, field, value) {
+  getSubArea(subIdx).items[catIdx][field] = value;
+}
+function removeCategory(subIdx, catIdx) {
+  getSubArea(subIdx).items.splice(catIdx, 1);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+function addCategory(subIdx) {
+  const sub = getSubArea(subIdx);
+  if (!sub.items) sub.items = [];
+  sub.items.push({ category: '新分类', items: [], labelColor: 'yellow' });
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+function updateItem(subIdx, catIdx, itemIdx, value) {
+  getSubArea(subIdx).items[catIdx].items[itemIdx] = value;
+}
+function removeItem(subIdx, catIdx, itemIdx) {
+  getSubArea(subIdx).items[catIdx].items.splice(itemIdx, 1);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+function addItem(subIdx, catIdx) {
+  const input = document.getElementById(`ef-newitem-${subIdx}-${catIdx}`);
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  getSubArea(subIdx).items[catIdx].items.push(val);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+
+// ---- Standards / notices ----
+function addStandard(subIdx) {
+  const input = document.getElementById(`ef-std-new-${subIdx}`);
+  const val = input.value.trim();
+  if (!val) return;
+  input.value = '';
+  const sub = getSubArea(subIdx);
+  if (!sub.standards || !Array.isArray(sub.standards)) sub.standards = [];
+  sub.standards.push(val);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+function updateStandard(subIdx, stdIdx, value) {
+  getSubArea(subIdx).standards[stdIdx] = value;
+}
+function removeStandard(subIdx, stdIdx) {
+  getSubArea(subIdx).standards.splice(stdIdx, 1);
+  document.getElementById('ef-subareas-container').innerHTML =
+    getEditingArea().subAreas.map((s, i) => renderSubAreaEditor(s, i)).join('');
+}
+
+// ---- Save / Delete ----
+function saveAreaEdit() {
+  // Trigger all onchange handlers so sub-area edits are captured
+  document.getElementById('editModalBody').querySelectorAll('input, select').forEach(el => el.blur());
+
+  const area = getEditingArea();
+  area.name = document.getElementById('ef-name').value.trim() || area.name;
+  area.description = document.getElementById('ef-desc').value.trim();
+  area.icon = document.getElementById('ef-icon').value.trim() || '📦';
+  area.required = document.getElementById('ef-required').checked;
+  area.storeType = document.getElementById('ef-mall').checked ? '商场铺' : undefined;
+
+  if (editingAreaId === '') {
+    // New area - assign ID
+    area.id = document.getElementById('ef-id').value.trim() || ('area-' + Date.now());
+    editingAreaId = area.id; // mark as saved
+  }
+
+  // Update icon map
+  AREA_ICONS[area.id] = area.icon;
+  // Update block class map
+  if (!BLOCK_CLASS_MAP[area.id]) BLOCK_CLASS_MAP[area.id] = 'block-cashier';
+
+  renderAreaList();
+  // Re-render all placed blocks of this area
+  placedAreas.filter(b => b.id === area.id).forEach(b => renderBlockOnCanvas(b.instanceId));
+  closeEditor();
+  // Persist to localStorage so refreshes don't lose edits
+  try { localStorage.setItem('workbuddy_standards', JSON.stringify(standards)); } catch(e) {}
+  showToast(`✅ 已保存「${area.name}」`);
+}
+
+function deleteCurrentArea() {
+  if (!editingAreaId) return;
+  const area = standards.areas.find(a => a.id === editingAreaId);
+  if (!area || !confirm(`确定要删除区域「${area.name}」吗？`)) {
+    if (editingAreaId === '') standards.areas.pop(); // clean up temp new area
+    closeEditor();
+    return;
+  }
+  standards.areas = standards.areas.filter(a => a.id !== editingAreaId);
+  // Remove placed blocks
+  placedAreas.filter(b => b.id === editingAreaId).forEach(b => {
+    const el = document.getElementById(b.instanceId);
+    if (el) el.remove();
+  });
+  placedAreas = placedAreas.filter(b => b.id !== editingAreaId);
+  renderAreaList();
+  updatePlaceholder();
+  editingAreaId = 'skip-cleanup'; // prevent closeEditor from popping again
+  closeEditor();
+  showToast('🗑️ 已删除区域');
+}
+
+// ---- Export functions ----
+function downloadStandardsJSON() {
+  const json = JSON.stringify(standards, null, 2);
+  downloadFile(json, 'standards.json', 'application/json');
+  showToast('📥 已导出 standards.json');
+}
+
+function downloadUpdatedHTML() {
+  // Generate updated HTML with embedded JSON
+  const html = document.documentElement.outerHTML;
+  // Replace the embedded JSON block
+  const newJson = JSON.stringify(standards, null, 2);
+  const updated = html.replace(
+    /<script type="application\/json" id="std-data">[\s\S]*?<\/script>/,
+    `<script type="application/json" id="std-data">\n${newJson}\n<\/script>`
+  );
+  downloadFile('<!DOCTYPE html>\n' + updated, 'index.html', 'text/html;charset=utf-8');
+  showToast('📥 已导出更新后的 HTML');
+}
+
+function saveStandards() {
+  console.log('[saveStandards] ========== 开始执行 ==========');
+  let token = localStorage.getItem('gh_token') || '';
+  if (!token) {
+    token = prompt('请输入 GitHub Token（ghp_ 开头）：');
+    if (!token) { console.log('[saveStandards] 用户取消'); return; }
+    localStorage.setItem('gh_token', token);
+  }
+  console.log('[saveStandards] Token 已获取');
+
+  // 更新 lastUpdated 字段，用于版本对比
+  standards.lastUpdated = new Date().toISOString().split('T')[0];
+  const json = JSON.stringify(standards, null, 2);
+  console.log('[saveStandards] 准备推送，数据摘要：', {
+    areas: standards.areas?.length,
+    lastUpdated: standards.lastUpdated,
+    nigiriName: standards.areas?.find(a => a.id === 'nigiri-workstation')?.name
+  });
+
+  showToast('⏳ 正在推送到 GitHub...');
+
+  // UTF-8 → Base64 (browser-safe)
+  function utf8ToB64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    const chunk = 8192;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+    }
+    return btoa(binary);
+  }
+  console.log('[saveStandards] Base64 编码完成，开始获取文件 SHA...');
+
+  // Get file SHA first (cache-bust via URL param; do NOT add Cache-Control header — GitHub CORS preflight will reject it)
+  const shaUrl = 'https://api.github.com/repos/RainG0106/store-positioning-tool/contents/standards.json?t=' + Date.now();
+  fetch(shaUrl, {
+    headers: {
+      'Authorization': 'token ' + token,
+      'User-Agent': 'store-tool'
+      // 注意：不能加 Cache-Control header，否则 CORS 预检失败
+    }
+  })
+  .then(r => { console.log('[saveStandards] GET SHA 响应状态：', r.status); return r.json(); })
+  .then(data => {
+    console.log('[saveStandards] GET SHA 响应数据：', data);
+    if (data.message && !data.sha) {
+      // GET 阶段就返回错误（如 401/404/403）
+      console.error('[saveStandards] GET SHA 返回错误：', data.message);
+      if (data.message.includes('Bad credentials')) {
+        localStorage.removeItem('gh_token');
+        showToast('❌ Token 已失效，请重新保存标准');
+      } else {
+        showToast('❌ 获取文件信息失败：' + data.message);
+      }
+      return;
+    }
+    const sha = data.sha || '';
+    console.log('[saveStandards] 文件 SHA：', sha);
+    const b64 = utf8ToB64(json);
+    console.log('[saveStandards] 准备 PUT，内容 Base64 长度：', b64.length);
+    return fetch('https://api.github.com/repos/RainG0106/store-positioning-tool/contents/standards.json', {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + token,
+        'Content-Type': 'application/json',
+        'User-Agent': 'store-tool'
+      },
+      body: JSON.stringify({
+        message: '更新 standards.json - ' + new Date().toLocaleString('zh-CN'),
+        content: b64,
+        sha: sha,
+        branch: 'main'
+      })
+    })
+    .then(r => { console.log('[saveStandards] PUT 响应状态：', r.status); return r.json(); })
+    .then(data2 => {
+      console.log('[saveStandards] PUT 响应数据：', data2);
+      if (data2.content) {
+        // 推送成功：同步更新 localStorage，防止刷新后不一致
+        localStorage.setItem('workbuddy_standards', JSON.stringify(standards, null, 2));
+        showToast('✅ 已推送到 GitHub！门店端刷新即可同步');
+        console.log('[saveStandards] ✅ 推送成功！SHA=', data2.content.sha);
+      } else if (data2.message && data2.message.includes('Bad credentials')) {
+        localStorage.removeItem('gh_token');
+        showToast('❌ Token 已失效，请重新保存标准');
+        console.log('[saveStandards] ❌ Token 失效');
+      } else if (data2.message && (data2.message.includes('SHA') || data2.message.includes('sha'))) {
+        // SHA 冲突：文件已被修改，自动重新获取 SHA 并重试
+        showToast('⚠️ 检测到文件冲突，正在自动重试...');
+        console.warn('[saveStandards] ⚠️ SHA 冲突，1秒后自动重试...');
+        setTimeout(() => saveStandards(), 1000);
+        return;
+      } else {
+        showToast('❌ 推送失败：' + (data2.message || '未知错误'));
+        console.log('[saveStandards] ❌ 推送失败：', data2);
+      }
+    })
+    .catch(e2 => {
+      console.error('[saveStandards] ❌ PUT 阶段异常：', e2);
+      showToast('❌ 推送失败（PUT）：' + e2.message);
+    });
+  })
+  .catch(e => {
+    console.error('[saveStandards] ❌ GET SHA 阶段异常：', e);
+    showToast('❌ 推送失败（网络）：' + e.message);
+    // 提示常见原因
+    console.warn('[saveStandards] 可能原因：网络中断、CORS被拦截、浏览器扩展拦截、Token无效');
+  });
+}
+
+async function clearCache() {
+  if (!confirm('确定清除本地缓存并重新从 GitHub 加载最新数据吗？')) return;
+  localStorage.removeItem('workbuddy_standards');
+  localStorage.removeItem('gh_token');
+  showToast('⏳ 正在从 GitHub 拉取最新数据...');
+
+  // 立即强制拉取最新数据，避免 reload 后 fetch 被 CDN 缓存
+  try {
+    const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now() + '&_=' + Math.random());
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem('workbuddy_standards', JSON.stringify(data, null, 2));
+      showToast('✅ 已获取最新数据，正在刷新...');
+      setTimeout(() => location.reload(), 300);
+      return;
+    }
+  } catch (e) {
+    console.warn('[clearCache] Fetch failed:', e);
+  }
+
+  showToast('⚠️ GitHub 拉取失败，将使用内置数据并刷新...');
+  setTimeout(() => location.reload(), 800);
+}
+
+async function refreshFromGitHub() {
+  showToast('⏳ 正在从 GitHub 获取最新数据...');
+  let token = localStorage.getItem('gh_token') || '';
+  try {
+    const headers = { 'User-Agent': 'store-tool' };
+    // 注意：不能加 Cache-Control header，否则 CORS 预检失败
+    if (token) headers['Authorization'] = 'token ' + token;
+    const res = await fetch('https://api.github.com/repos/RainG0106/store-positioning-tool/contents/standards.json?t=' + Date.now(), { headers });
+    if (res.ok) {
+      const data = await res.json();
+      // GitHub API 返回 base64 编码的 content，需要解码
+      const raw = atob(data.content.replace(/\s/g, ''));
+      const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
+      const text = new TextDecoder().decode(bytes);
+      const parsed = JSON.parse(text);
+      standards = parsed;
+      localStorage.setItem('workbuddy_standards', JSON.stringify(standards, null, 2));
+      renderAreaList();
+      updatePlaceholder();
+      showToast('✅ 已从 GitHub 刷新！最后更新：' + (standards.lastUpdated || '未知'));
+      console.log('[refreshFromGitHub] ✅ 刷新成功，areas:', standards.areas?.length);
+    } else {
+      throw new Error('HTTP ' + res.status);
+    }
+  } catch(e) {
+    console.error('[refreshFromGitHub] 失败：', e);
+    showToast('❌ 刷新失败：' + e.message);
+  }
+}
+
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Click canvas background to deselect
 document.getElementById('canvasStage').addEventListener('click', (e) => {
   if (e.target.id === 'canvasStage' || e.target.closest('.canvas-placeholder')) {
     if (selectedId) {
