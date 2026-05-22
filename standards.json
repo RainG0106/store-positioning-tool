@@ -496,7 +496,10 @@
             {
               "category": "操作台层架食品",
               "items": [
-                "芝麻"
+                "芝麻",
+                "整张紫菜",
+                "切条紫菜",
+                "肉松"
               ],
               "labelColor": "green"
             },
@@ -527,15 +530,6 @@
                 "砧板"
               ],
               "labelColor": "blue"
-            },
-            {
-              "category": "配料",
-              "items": [
-                "整张紫菜",
-                "切条紫菜",
-                "肉松"
-              ],
-              "labelColor": "green"
             }
           ]
         },
