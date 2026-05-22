@@ -2448,11 +2448,7 @@ function downloadPDF() {
   // 所有 doc-* 样式（CSS 变量已硬编码，避免新文档中变量丢失）
   const docStyles = `
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; padding:32px 16px; width:720px; font-size:13px; line-height:1.7; }
-.doc-section { break-inside: avoid; page-break-inside: avoid; }
-.doc-card { break-inside: avoid; page-break-inside: avoid; }
-.doc-table { break-inside: avoid; page-break-inside: avoid; }
-.doc-toc { break-inside: avoid; page-break-inside: avoid; }
+body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; padding:24px 16px; width:720px; font-size:12.5px; line-height:1.6; }
 .doc-cover{text-align:center;padding:36px 0 24px;}
 .doc-cover-brand{font-size:12px;color:#E8A020;font-weight:600;letter-spacing:4px;margin-bottom:6px;}
 .doc-cover-title{font-size:22px;font-weight:700;color:#2D2116;margin-bottom:6px;}
@@ -2464,7 +2460,7 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:#8C7A66;}
 .doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
 .doc-section { margin-bottom: 20px; }
-.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;page-break-before:always;}
+.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;}
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
 .doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;}
 .doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
