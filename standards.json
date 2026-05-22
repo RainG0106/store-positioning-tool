@@ -161,15 +161,6 @@
               "labelColor": "yellow"
             },
             {
-              "category": "限定礼盒",
-              "items": [
-                "新团圆大满贯",
-                "花花寿司礼盒",
-                "露营盒"
-              ],
-              "labelColor": "yellow"
-            },
-            {
               "category": "餐盒",
               "items": [
                 "0号餐盒",
@@ -182,7 +173,9 @@
             {
               "category": "外带包装",
               "items": [
-                "二人世界纸盒"
+                "二人世界纸盒",
+                "新团圆大满贯",
+                "花花寿司礼盒"
               ],
               "labelColor": "yellow"
             },
@@ -368,9 +361,9 @@
     },
     {
       "id": "nigiri-workstation",
-      "name": "手握工作台",
+      "name": "手握寿司、刺身、小吃类产品的存放与出品操作",
       "icon": "utensils",
-      "description": "手握寿司、刺身、小吃类产品的存放与出品操作（A台）",
+      "description": "手握寿司、刺身、小吃类产品的存放与出品操作",
       "required": true,
       "positionRequirement": "必须设置在紧邻出餐口的位置",
       "temperature": "0℃ ~ 8℃",
@@ -402,15 +395,9 @@
           "type": "desktop",
           "items": [
             {
-              "category": "食品配料",
+              "category": "操作台层架食品",
               "items": [
-                "寿司绑带"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "调料区",
-              "items": [
+                "寿司绑带",
                 "椰蓉"
               ],
               "labelColor": "green"
@@ -419,13 +406,7 @@
               "category": "工具区",
               "items": [
                 "火枪",
-                "酱料架"
-              ],
-              "labelColor": "blue"
-            },
-            {
-              "category": "操作区",
-              "items": [
+                "酱料架",
                 "烤盘",
                 "砧板",
                 "小垃圾桶"
@@ -441,49 +422,37 @@
           "temperature": "0℃ ~ 8℃",
           "items": [
             {
-              "category": "半成品寿司",
+              "category": "半成品食材",
               "items": [
-                "柠檬",
-                "八爪小吃",
+                "长蟹脚",
+                "鲷鱼片",
                 "北极贝",
                 "玉子片",
-                "蟹脚"
+                "蟹脚",
+                "鳗鱼片",
+                "咸蛋黄",
+                "小甜虾",
+                "熟虾"
               ],
               "labelColor": "green"
             },
             {
-              "category": "粽子叶",
-              "items": [
-                "粽子叶"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "海鲜/小吃",
+              "category": "小吃",
               "items": [
                 "海草小吃",
-                "长蟹脚",
-                "鳕鱼片"
-              ],
-              "labelColor": "green"
-            },
-            {
-              "category": "大福类",
-              "items": [
+                "八爪小吃",
                 "大福",
                 "章鱼小丸子",
-                "咸蛋黄",
-                "鳗鱼片"
+                "山药泥",
+                "三文鱼片"
               ],
               "labelColor": "green"
             },
             {
-              "category": "甜虾类",
+              "category": "配料",
               "items": [
-                "小甜虾",
-                "山药泥",
-                "熟虾",
-                "三文鱼片"
+                "粽子叶",
+                "柠檬"
               ],
               "labelColor": "green"
             }
@@ -496,9 +465,9 @@
     },
     {
       "id": "gunkan-workstation",
-      "name": "军舰工作台",
+      "name": "卷类、饭类、军舰位产品的存放与出品操作",
       "icon": "utensils-crossed",
-      "description": "卷类、饭类、军舰位产品的存放与出品操作（B台）",
+      "description": "卷类、饭类、军舰位产品的存放与出品操作",
       "required": true,
       "positionRequirement": "优先设置在紧邻出餐口位置，与手握台并排布置，保持同一水平线",
       "temperature": "0℃ ~ 8℃",
