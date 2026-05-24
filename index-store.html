@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -756,6 +756,7 @@
     <div class="modal-footer">
       <button class="modal-btn" onclick="downloadHTML()">导出 HTML</button>
       <button class="modal-btn" onclick="downloadCSV()">导出 CSV</button>
+      <button class="modal-btn" onclick="downloadLongImage()">导出长图</button>
       <button class="modal-btn primary" onclick="downloadPDF()">导出 PDF</button>
     </div>
   </div>
@@ -2436,19 +2437,15 @@ function downloadCSV() {
   showToast('✅ CSV已导出');
 }
 
-function downloadPDF() {
+function downloadLongImage() {
   if (!placedAreas.length) { showToast('⚠️ 画布为空'); return; }
   const storeName = document.getElementById('storeName').value || '苍井寿司门店';
-  showToast('⏳ 正在生成 PDF，请稍候…');
-
-  // PDF导出 v3 — 新窗口独立渲染，margin用最简数字格式
-  console.log('[PDF] downloadPDF v3 starting');
   const bodyHTML = document.getElementById('exportBody').innerHTML;
+  showToast('⏳ 正在生成长图，请稍候…');
 
-  // 所有 doc-* 样式（CSS 变量已硬编码，避免新文档中变量丢失）
-  const docStyles = `
+  const imgStyles = `
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; padding:24px 16px; width:640px; font-size:12.5px; line-height:1.6; }
+body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; padding:24px 20px; width:800px; font-size:12.5px; line-height:1.6; }
 .doc-cover{text-align:center;padding:36px 0 24px;}
 .doc-cover-brand{font-size:12px;color:#E8A020;font-weight:600;letter-spacing:4px;margin-bottom:6px;}
 .doc-cover-title{font-size:22px;font-weight:700;color:#2D2116;margin-bottom:6px;}
@@ -2464,9 +2461,9 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
 .doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;}
 .doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
-.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;page-break-inside:avoid;break-inside:avoid;}
+.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;}
 .doc-card-meta{background:#F5F0EB;border:none;}
-.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;page-break-inside:avoid;break-inside:avoid;}
+.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;}
 .doc-callout-warn{background:#FEF0F0;border-left:3px solid #D4380D;color:#CB2634;}
 .doc-callout-info{background:#E8F0FF;border-left:3px solid #1A6FBA;color:#1F65D7;}
 .doc-callout-tip{background:#E8F8ED;border-left:3px solid #283C02;color:#1A8A3E;}
@@ -2484,48 +2481,152 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-label-usage{font-size:10px;color:#8C7A66;}
 .doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:#8C7A66;line-height:1.6;}
 .doc-footer-line{width:32px;height:1px;background:#E5DDD5;margin:0 auto 8px;}
+.doc-table{width:100%;border-collapse:collapse;font-size:10px;}
+.doc-table thead th{background:#F5F0EB;font-weight:600;color:#8C7A66;padding:5px 8px;text-align:left;border-bottom:2px solid #E5DDD5;font-size:10px;white-space:nowrap;}
+.doc-table tbody td{padding:5px 8px;border-bottom:1px solid #F2F0ED;color:#1F2329;font-size:10px;}
+.doc-table tbody tr:last-child td{border-bottom:none;}
+.doc-table-stripe tbody tr:nth-child(even){background:#FAFAF8;}
+.doc-table-steps tbody td{vertical-align:top;}
+.doc-step-num{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;padding:0 4px;}
+.doc-chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0;}
+.doc-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;}
+.doc-inline-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+.doc-dot-yellow{background:#F5C542;}
+.doc-dot-blue{background:#5B9BD5;}
+.doc-dot-green{background:#70AD47;}
 `;
 
-  // 打开一个干净的新窗口（极小尺寸放角落，用户几乎无感知）
-  const win = window.open('', '_blank', 'width=100,height=100,left=9999,top=9999');
+  const win = window.open('', '_blank', 'width=850,height=600');
+  if (!win) { showToast('⚠️ 请允许浏览器弹窗'); return; }
+
+  win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${storeName} 物料定位标准</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
+<style>${imgStyles}</style>
+</head>
+<body>${bodyHTML}</body>
+</html>`);
+  win.document.close();
+
+  const tryRender = () => {
+    if (!win.html2canvas) { setTimeout(tryRender, 200); return; }
+    win.html2canvas(win.document.body, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#FFFFFF',
+      logging: false,
+      width: 800,
+      windowWidth: 800
+    }).then(canvas => {
+      const link = win.document.createElement('a');
+      link.download = '${storeName}_物料定位标准.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('✅ 长图已导出');
+    }).catch(err => {
+      console.error('Long image error:', err);
+      showToast('⚠️ 长图导出失败');
+    });
+  };
+  setTimeout(tryRender, 600);
+}
+
+function downloadPDF() {
+  if (!placedAreas.length) { showToast('⚠️ 画布为空'); return; }
+  const storeName = document.getElementById('storeName').value || '苍井寿司门店';
+  showToast('⏳ 正在打开打印窗口，请选择「另存为 PDF」…');
+
+  const bodyHTML = document.getElementById('exportBody').innerHTML;
+
+  // v4 — 改用浏览器原生打印，CSS 分页控制真正生效
+  const printStyles = `
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; font-size:12.5px; line-height:1.6; }
+@page { margin: 20mm; size: A4 portrait; }
+.doc-cover{text-align:center;padding:36px 0 24px;page-break-inside:avoid;}
+.doc-cover-brand{font-size:12px;color:#E8A020;font-weight:600;letter-spacing:4px;margin-bottom:6px;}
+.doc-cover-title{font-size:22px;font-weight:700;color:#2D2116;margin-bottom:6px;}
+.doc-cover-sub{font-size:13px;color:#8C7A66;margin-bottom:16px;}
+.doc-cover-line{width:32px;height:2px;background:#E8A020;margin:0 auto 12px;border-radius:2px;}
+.doc-cover-meta{font-size:11px;color:#8C7A66;}
+.doc-toc{padding:14px 16px;background:#F5F0EB;border-radius:6px;margin-bottom:20px;page-break-inside:avoid;}
+.doc-toc-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:#8C7A66;}
+.doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
+.doc-section { margin-bottom: 20px; }
+.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;page-break-after:avoid;break-after:avoid;}
+.doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
+.doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;page-break-after:avoid;break-after:avoid;}
+.doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
+.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;page-break-inside:avoid;break-inside:avoid;}
+.doc-card-meta{background:#F5F0EB;border:none;}
+.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;page-break-inside:avoid;break-inside:avoid;}
+.doc-callout-warn{background:#FEF0F0;border-left:3px solid #D4380D;color:#CB2634;}
+.doc-callout-info{background:#E8F0FF;border-left:3px solid #1A6FBA;color:#1F65D7;}
+.doc-callout-tip{background:#E8F8ED;border-left:3px solid #283C02;color:#1A8A3E;}
+.doc-callout-title{font-weight:600;margin-bottom:4px;}
+.doc-callout-item{padding:1px 0;}
+.doc-flow-step{display:flex;gap:8px;padding:4px 0;position:relative;min-height:20px;page-break-inside:avoid;}
+.doc-flow-dot{width:8px;height:8px;border-radius:50%;background:#E8A020;margin-top:4px;flex-shrink:0;z-index:1;}
+.doc-flow-line{position:absolute;left:3.5px;top:14px;width:1px;height:calc(100% - 4px);background:#E5DDD5;}
+.doc-flow-text{font-size:10px;color:#2D2116;line-height:1.5;}
+.doc-temp-badge{display:inline-block;padding:1px 8px;font-size:10px;font-weight:600;color:#1A6FBA;background:#E8F0FF;border-radius:8px;margin-bottom:6px;}
+.doc-label-system{display:flex;gap:8px;margin-bottom:6px;}
+.doc-label-card{flex:1;background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px;text-align:center;}
+.doc-label-dot{width:10px;height:10px;border-radius:50%;margin:0 auto 6px;}
+.doc-label-name{font-size:11px;font-weight:600;margin-bottom:3px;}
+.doc-label-usage{font-size:10px;color:#8C7A66;}
+.doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:#8C7A66;line-height:1.6;}
+.doc-footer-line{width:32px;height:1px;background:#E5DDD5;margin:0 auto 8px;}
+.doc-table{width:100%;border-collapse:collapse;font-size:10px;}
+.doc-table thead th{background:#F5F0EB;font-weight:600;color:#8C7A66;padding:5px 8px;text-align:left;border-bottom:2px solid #E5DDD5;font-size:10px;white-space:nowrap;page-break-after:avoid;break-after:avoid;}
+.doc-table tbody td{padding:5px 8px;border-bottom:1px solid #F2F0ED;color:#1F2329;font-size:10px;}
+.doc-table tbody tr:last-child td{border-bottom:none;}
+.doc-table tbody tr{page-break-inside:avoid;break-inside:avoid;}
+.doc-table-stripe tbody tr:nth-child(even){background:#FAFAF8;}
+.doc-table-steps tbody td{vertical-align:top;}
+.doc-step-num{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;padding:0 4px;}
+.doc-chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0;}
+.doc-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;}
+.doc-inline-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
+.doc-dot-yellow{background:#F5C542;}
+.doc-dot-blue{background:#5B9BD5;}
+.doc-dot-green{background:#70AD47;}
+@media print {
+  .doc-callout, .doc-card, .doc-flow-step, .doc-toc, .doc-cover { page-break-inside:avoid; break-inside:avoid; }
+  .doc-h2, .doc-sub-title, .doc-table thead { page-break-after:avoid; break-after:avoid; }
+  body { padding:0; }
+}
+`;
+
+  const win = window.open('', '_blank', 'width=800,height=600');
   if (!win) { showToast('⚠️ 请允许浏览器弹窗以导出 PDF'); return; }
 
   win.document.write(`<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>PDF Export</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"><\/script>
-<style>${docStyles}</style>
+<title>${storeName} 物料定位标准</title>
+<style>${printStyles}</style>
 </head>
 <body>${bodyHTML}</body>
 </html>`);
   win.document.close();
 
-  // 等 html2pdf.js 加载完成后执行
-  const tryExport = () => {
-    if (!win.html2pdf) {
-      setTimeout(tryExport, 100);
-      return;
+  // 确保内容渲染完成后触发打印
+  setTimeout(() => {
+    try {
+      win.focus();
+      win.print();
+      showToast('✅ 请在打印对话框中选择「另存为 PDF」');
+    } catch (e) {
+      console.error('Print error:', e);
+      showToast('⚠️ 打印窗口打开失败');
     }
-    win.html2pdf().set({
-      margin:      20,
-      filename:    `${storeName}_物料定位标准.pdf`,
-      image:       { type: 'jpeg', quality: 0.95 },
-      html2canvas: { scale: 2, useCORS: true, logging: false },
-      jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:   { mode: ['css', 'legacy'] }
-    }).from(win.document.body).save().then(() => {
-      win.close();
-      showToast('✅ PDF 已导出');
-    }).catch(err => {
-      console.error('PDF error:', err);
-      win.close();
-      showToast('⚠️ PDF 导出失败');
-    });
-  };
-
-  setTimeout(tryExport, 600);
+  }, 500);
 }
 
 function exportAreaDoc() {
