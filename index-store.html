@@ -2460,12 +2460,14 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:#8C7A66;}
 .doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
 .doc-section { margin-bottom: 20px; }
-.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;page-break-after:avoid;}
+.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;page-break-after:avoid;break-after:avoid;}
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
-.doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;}
+.doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;page-break-after:avoid;break-after:avoid;}
 .doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
-.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;}
+.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;page-break-inside:avoid;break-inside:avoid;}
 .doc-card-meta{background:#F5F0EB;border:none;}
+.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;page-break-inside:avoid;break-inside:avoid;}
+.doc-table tr{page-break-inside:avoid;break-inside:avoid;}
 .doc-meta-row{font-size:10px;color:#8C7A66;padding:2px 0;}
 .doc-meta-label{display:inline-block;background:#FFF3D6;color:#C4851A;font-weight:600;font-size:10px;padding:0 6px;border-radius:3px;margin-right:6px;}
 .doc-table{width:100%;border-collapse:collapse;font-size:10px;}
@@ -2526,7 +2528,7 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
       image:       { type: 'jpeg', quality: 0.95 },
       html2canvas: { scale: 2, useCORS: true, logging: false },
       jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak:   { mode: ['css', 'legacy', 'avoid-all'] }
+      pagebreak:   { mode: 'avoid-all' }
     }).from(win.document.body).save().then(() => {
       win.close();
       showToast('✅ PDF 已导出');
