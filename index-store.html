@@ -7,7 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>苍井寿司 · 门店物料定位工具</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
+<script src="html2pdf.bundle.min.js"></script>
 <style>
   :root {
     --brand: #E8A020;
@@ -633,13 +633,16 @@
   .doc-cover-sub{font-size:13px;color:var(--text-muted);margin-bottom:16px;}
   .doc-cover-line{width:32px;height:2px;background:var(--brand);margin:0 auto 12px;border-radius:2px;}
   .doc-cover-meta{font-size:11px;color:var(--text-muted);}
-  .doc-toc{padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:20px;}
-  .doc-toc-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+  .doc-toc{padding:14px 16px;background:var(--bg);border-radius:var(--radius-sm);margin-bottom:20px;;break-after:always;page-break-after:always;}
+  .doc-toc-title{font-size:18px;font-weight:800;margin-bottom:14px;color:var(--text);letter-spacing:6px;text-align:center;}
   .doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:var(--text-muted);}
   .doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:var(--brand-light);color:var(--brand-dark);font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
   .doc-section { margin-bottom: 20px; }
   .doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
   .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--brand);color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
+.doc-h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed var(--border);color:var(--text);}
+.doc-h3-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:var(--text2);color:#fff;font-size:9px;font-weight:700;border-radius:4px;flex-shrink:0;}
+.doc-toc-sub{padding-left:28px;}
   .doc-sub-title{font-size:12px;font-weight:600;color:var(--text);margin:10px 0 6px;padding-left:8px;border-left:3px solid var(--brand);}
   .doc-sub-sub-title{font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:6px;}
   .doc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;overflow-x:auto;}
@@ -674,6 +677,8 @@
   .doc-label-usage{font-size:10px;color:var(--text-muted);}
   .doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:var(--text-muted);line-height:1.6;}
   .doc-footer-line{width:32px;height:1px;background:var(--border);margin:0 auto 8px;}
+  .doc-part-divider{page-break-before:always;margin:40px 0 32px;border-top:3px solid var(--brand);position:relative;}
+  .doc-part-label{font-size:20px;font-weight:800;color:var(--brand);margin-bottom:14px;letter-spacing:3px;}
 
   /* Edit modal */
   
@@ -691,7 +696,7 @@
     <button class="header-btn" onclick="refreshFromGitHub()" title="从GitHub刷新最新标准数据" id="refreshBtn">🔄 刷新数据</button>
     <button class="header-btn warning" onclick="clearCache()" title="清除本地缓存并从GitHub重新加载">🗑️ 清除缓存</button>
     <button class="header-btn" onclick="clearAll()">清空全部</button>
-    <button class="header-btn" onclick="savePlan()">保存方案</button>
+    <button class="header-btn" onclick="loadTemplate()" title="按店铺类型加载标准模板">📋 模版</button>
     <button class="header-btn primary" onclick="exportAll()">生成完整文档</button>
   </div>
 </div>
@@ -747,17 +752,36 @@
 
 <!-- Export Modal -->
 <div class="modal-overlay" id="exportModal">
-  <div class="modal">
+  <div class="modal" style="max-width:560px;">
     <div class="modal-header">
-      <div class="modal-title">门店物料定位标准文档</div>
-      <button class="modal-close" onclick="closeExportModal()">×</button>
+      <div class="modal-title">📋 门店营运标准手册</div>
+      <button class="modal-close" onclick="closeExportModal()">✕</button>
     </div>
     <div class="modal-body" id="exportBody"></div>
-    <div class="modal-footer">
-      <button class="modal-btn" onclick="downloadHTML()">导出 HTML</button>
-      <button class="modal-btn" onclick="downloadCSV()">导出 CSV</button>
-      <button class="modal-btn" onclick="downloadLongImage()">导出长图</button>
-      <button class="modal-btn primary" onclick="downloadPDF()">导出 PDF</button>
+    <div style="padding:12px 16px;border-top:1px solid var(--border);">
+      <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:8px;">📑 输出内容选择：</div>
+      <label style="display:flex;align-items:center;gap:6px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text-muted);">
+        <input type="checkbox" id="includeServiceFlow" checked style="accent-color:var(--brand);" onchange="updateExportPreview()">
+        <span>包含服务流程标准</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text-muted);">
+        <input type="checkbox" id="includePurchasing" checked style="accent-color:var(--brand);" onchange="updateExportPreview()">
+        <span>包含需购置物料清单</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text-muted);">
+        <input type="checkbox" id="includeReplenish" checked style="accent-color:var(--brand);" onchange="updateExportPreview()">
+        <span>包含补货流转链路</span>
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;padding:4px 0;cursor:pointer;font-size:12px;color:var(--text-muted);">
+        <input type="checkbox" id="includeLabelSystem" checked style="accent-color:var(--brand);" onchange="updateExportPreview()">
+        <span>包含标示牌颜色系统</span>
+      </label>
+    </div>
+    <div class="modal-footer" style="flex-wrap:wrap;gap:6px;">
+      <button class="modal-btn" onclick="downloadHTML()">🌐 HTML</button>
+      <button class="modal-btn" onclick="downloadCSV()">📊 CSV</button>
+      <button class="modal-btn" onclick="downloadLongImage()">🖼️ 长图</button>
+      <button class="modal-btn primary" onclick="downloadPDF()">📄 PDF</button>
     </div>
   </div>
 </div>
@@ -1388,10 +1412,17 @@ async function init() {
   const cached = localStorage.getItem('store_standards_cache');
   if (cached) {
     try {
-      standards = JSON.parse(cached);
-      console.log('[init] Loaded from localStorage cache, areas:', standards.areas?.length);
-      renderAreaList();
-      updatePlaceholder();
+      const cachedData = JSON.parse(cached);
+      // 验证缓存数据有效性
+      if (cachedData && Array.isArray(cachedData.areas) && cachedData.areas.length > 0) {
+        standards = cachedData;
+        console.log('[init] Loaded from localStorage cache, areas:', standards.areas.length);
+        renderAreaList();
+        updatePlaceholder();
+      } else {
+        console.warn('[init] Cached data invalid, removing cache');
+        localStorage.removeItem('store_standards_cache');
+      }
     } catch(e) { localStorage.removeItem('store_standards_cache'); }
   }
 
@@ -1400,29 +1431,36 @@ async function init() {
     const res = await fetch(GITHUB_RAW_BASE + '/standards.json?t=' + Date.now());
     if (res.ok) {
       const data = await res.json();
-      standards = data;
-      localStorage.setItem('store_standards_cache', JSON.stringify(data));
+      // 验证数据有效性：必须包含非空的 areas 数组
+      if (data && Array.isArray(data.areas) && data.areas.length > 0) {
+        standards = data;
+        localStorage.setItem('store_standards_cache', JSON.stringify(data));
 
-      // Save update time
-      const now = new Date();
-      const timeStr = now.toLocaleString('zh-CN');
-      localStorage.setItem('store_standards_last_update', timeStr);
-      if (timeEl) timeEl.textContent = '最后更新：' + timeStr;
+        // Save update time
+        const now = new Date();
+        const timeStr = now.toLocaleString('zh-CN');
+        localStorage.setItem('store_standards_last_update', timeStr);
+        if (timeEl) timeEl.textContent = '最后更新：' + timeStr;
 
-      console.log('[init] Loaded from GitHub, areas:', standards.areas?.length);
-      renderAreaList();
-      updatePlaceholder();
-      return;
+        console.log('[init] Loaded from GitHub, areas:', standards.areas.length);
+        renderAreaList();
+        updatePlaceholder();
+        return;
+      } else {
+        console.warn('[init] GitHub data invalid or empty areas, falling back');
+      }
     }
   } catch(e) {
     console.warn('[init] GitHub fetch failed, using cached/embedded data');
   }
 
-  // 3. Fall back to embedded JSON
-  loadEmbeddedStandards();
+  // 3. Fall back to embedded JSON (only if no valid data yet)
+  if (!standards || !Array.isArray(standards.areas) || standards.areas.length === 0) {
+    loadEmbeddedStandards();
+  }
   renderAreaList();
   updatePlaceholder();
-  console.log('[init] Done (embedded). Areas:', standards.areas?.length);
+  console.log('[init] Done. Areas:', standards?.areas?.length);
 }
 
 function loadEmbeddedStandards() {
@@ -2045,43 +2083,413 @@ function updateCabinet(instId, key, value) {
 function exportAll() {
   if (!placedAreas.length) { showToast('画布为空'); return; }
   const storeName = document.getElementById('storeName').value || '苍井寿司门店';
-  const html = buildDocHTML(storeName);
+  const exportOptions = {
+    includeServiceFlow: !!document.getElementById('includeServiceFlow')?.checked,
+    includePurchasing: !!document.getElementById('includePurchasing')?.checked,
+    includeReplenish: !!document.getElementById('includeReplenish')?.checked,
+    includeLabelSystem: !!document.getElementById('includeLabelSystem')?.checked
+  };
+  window._exportOptions = exportOptions;
+  const html = buildDocHTML(storeName, exportOptions);
   document.getElementById('exportBody').innerHTML = html;
   document.getElementById('exportModal').classList.add('active');
 }
+
+function getExportOpts() {
+  return {
+    includeServiceFlow: !!document.getElementById('includeServiceFlow')?.checked,
+    includePurchasing: !!document.getElementById('includePurchasing')?.checked,
+    includeReplenish: !!document.getElementById('includeReplenish')?.checked,
+    includeLabelSystem: !!document.getElementById('includeLabelSystem')?.checked
+  };
+}
+
+function updateExportPreview() {
+  const storeName = document.getElementById('storeName').value || '苍井寿司门店';
+  const opts = getExportOpts();
+  window._exportOptions = opts;
+  document.getElementById('exportBody').innerHTML = buildDocHTML(storeName, opts);
+}
+
 function closeExportModal() {
   document.getElementById('exportModal').classList.remove('active');
 }
 
-function buildDocHTML(storeName) {
+function buildAreaDocCard(area, block, idx) {
+  const COLOR_MAP = {
+    'cashier':            { color: '#E8A020', dark: '#C4851A' },
+    'sushi-display':      { color: '#1A6FBA', dark: '#155A99' },
+    'serving-window':     { color: '#D4380D', dark: '#A02008' },
+    'packing-station':    { color: '#888E0B', dark: '#6B7009' },
+    'nigiri-workstation': { color: '#0891B2', dark: '#0E7490' },
+    'gunkan-workstation': { color: '#7C3AED', dark: '#6D28D9' },
+    'prep-workstation':   { color: '#78350F', dark: '#5C2A0C' },
+    'storage-shelf':      { color: '#78716C', dark: '#57534E' },
+    'rice-cooking':       { color: '#EA580C', dark: '#C2410C' },
+    'freezer':            { color: '#0D9488', dark: '#0F766E' },
+    'upright-fridge':     { color: '#2563EB', dark: '#1D4ED8' }
+  };
+  const cls = BLOCK_CLASS_MAP[area.id] || '';
+  const colors = COLOR_MAP[area.id] || { color: '#888E0B', dark: '#6B7009' };
+  const icon = AREA_ICONS[area.id] || '📦';
+  const blockNum = block.num || 1;
+  const displayName = area.name + (blockNum > 1 ? ' #' + blockNum : '');
+
+  let html = '<div class="doc-area-block ' + cls + '">';
+  html += '<div class="doc-area-block-header" style="background:' + colors.color + ';">';
+  html += '<span class="doc-area-icon">' + icon + '</span>';
+  html += '<span class="doc-area-name">' + displayName + '</span>';
+  html += '<span class="doc-area-num">#' + (idx + 1) + '</span>';
+  html += '</div>';
+  html += '<div class="doc-area-block-body">';
+  if (area.description) {
+    html += '<div class="doc-area-desc">' + area.description + '</div>';
+  }
+  html += buildBlockBodyHTML(area, block);
+  html += '</div></div>';
+  return html;
+}
+
+function buildStoreLayoutHTML() {
+  const COLOR_MAP = {
+    'cashier':            { color: '#E8A020', dark: '#C4851A' },
+    'sushi-display':      { color: '#1A6FBA', dark: '#155A99' },
+    'serving-window':     { color: '#D4380D', dark: '#A02008' },
+    'packing-station':    { color: '#888E0B', dark: '#6B7009' },
+    'nigiri-workstation': { color: '#0891B2', dark: '#0E7490' },
+    'gunkan-workstation': { color: '#7C3AED', dark: '#6D28D9' },
+    'prep-workstation':   { color: '#78350F', dark: '#5C2A0C' },
+    'storage-shelf':      { color: '#78716C', dark: '#57534E' },
+    'rice-cooking':       { color: '#EA580C', dark: '#C2410C' },
+    'freezer':            { color: '#0D9488', dark: '#0F766E' },
+    'upright-fridge':     { color: '#2563EB', dark: '#1D4ED8' }
+  };
+
+  const maxX = Math.max(...placedAreas.map(b => b.x + (b.w || 200)));
+  const maxY = Math.max(...placedAreas.map(b => b.y + (b.h || 160)));
+  const scale = maxX > 720 ? 720 / maxX : 1;
+
+  // 按 Y 坐标分入行（容差 40px）
+  const rows = [];
+  const rowThreshold = 40;
+  placedAreas.forEach((block, idx) => {
+    const area = standards.areas.find(a => a.id === block.id);
+    if (!area) return;
+    const y = block.y;
+    let row = rows.find(r => Math.abs(r.y - y) <= rowThreshold);
+    if (!row) { row = { y, blocks: [] }; rows.push(row); }
+    row.blocks.push({ block, idx, area });
+  });
+  rows.sort((a, b) => a.y - b.y);
+  rows.forEach(r => r.blocks.sort((a, b) => a.block.x - b.block.x));
+
+  let html = '<div class="doc-store-layout">';
+
+  rows.forEach(row => {
+    html += '<div class="doc-store-row">';
+    row.blocks.forEach(({ block, idx, area }) => {
+      const colors = COLOR_MAP[area.id] || { color: '#888E0B', dark: '#6B7009' };
+      const icon = AREA_ICONS[area.id] || '📦';
+      const blockNum = block.num || 1;
+      const displayName = area.name + (blockNum > 1 ? ' #' + blockNum : '');
+      const w = (block.w || 200) * scale;
+      const h = (block.h || 160) * scale;
+
+      html += '<div class="doc-store-block" style="width:' + w + 'px;min-height:' + h + 'px;">';
+      html += '<div class="doc-store-header" style="background:' + colors.color + ';">';
+      html += '<span class="doc-store-icon">' + icon + '</span>';
+      html += '<span class="doc-store-name">' + displayName + '</span>';
+      html += '<span class="doc-store-num">#' + (idx + 1) + '</span>';
+      html += '</div>';
+      html += '<div class="doc-store-body">';
+      html += buildBlockBodyHTML(area, block);
+      html += '</div></div>';
+    });
+    html += '</div>';
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function buildDocHTML(storeName, opts) {
   const now = new Date();
   const dateStr = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+  if (!opts) opts = { includePurchasing:true, includeReplenish:true, includeLabelSystem:true, includeServiceFlow:false };
   let html = '';
 
   // ===== Cover / Header =====
   html += `<div class="doc-cover">
     <div class="doc-cover-brand">苍井寿司</div>
     <div class="doc-cover-title">${storeName}</div>
-    <div class="doc-cover-sub">物料定位标准文档</div>
+    <div class="doc-cover-sub">营运标准手册</div>
     <div class="doc-cover-line"></div>
     <div class="doc-cover-meta">培训部 · ${dateStr}</div>
   </div>`;
 
   // ===== TOC =====
+  const CN_PARTS = ['一','二','三','四','五','六','七','八','九','十'];
+  let tocIdx = 0;
   html += `<div class="doc-toc">
-    <div class="doc-toc-title">目录</div>`;
-  placedAreas.forEach((block, idx) => {
-    const area = standards.areas.find(a => a.id === block.id);
-    if (!area) return;
-    const icon = AREA_ICONS[block.id] || '';
-    html += `<div class="doc-toc-item"><span class="doc-toc-num">${idx+1}</span><span>${icon} ${area.name}</span></div>`;
+    <div class="doc-toc-title">目　录</div>`;
+  html += `<div class="doc-toc-item"><span class="doc-toc-num">${CN_PARTS[tocIdx]}</span><span>门店定位系统</span></div>`; tocIdx++;
+  // 门店定位系统的二级目录：按 standards.areas 顺序，只显示已放置的区域
+  let tocSubIdx = 1;
+  standards.areas.forEach(area => {
+    const blocks = placedAreas.filter(block => block.id === area.id);
+    if (blocks.length === 0) return;
+    const icon = AREA_ICONS[area.id] || '';
+    html += `<div class="doc-toc-item doc-toc-sub"><span class="doc-toc-num">${tocSubIdx}</span><span>${icon} ${area.name}</span></div>`;
+    tocSubIdx++;
   });
+  if (opts.includePurchasing && standards.purchasingMaterials && standards.purchasingMaterials.length) {
+    html += `<div class="doc-toc-item"><span class="doc-toc-num">${CN_PARTS[tocIdx]}</span><span>需购置物料清单</span></div>`; tocIdx++;
+  }
+  if (opts.includeLabelSystem && standards.labelColorSystem) {
+    html += `<div class="doc-toc-item"><span class="doc-toc-num">${CN_PARTS[tocIdx]}</span><span>标示牌颜色系统</span></div>`; tocIdx++;
+  }
+  if (opts.includeReplenish && standards.replenishFlow && standards.replenishFlow.steps) {
+    html += `<div class="doc-toc-item"><span class="doc-toc-num">${CN_PARTS[tocIdx]}</span><span>补货流转链路</span></div>`; tocIdx++;
+  }
+  if (opts.includeServiceFlow) {
+    html += `<div class="doc-toc-item"><span class="doc-toc-num">${CN_PARTS[tocIdx]}</span><span>服务流程标准</span></div>`; tocIdx++;
+    // 服务流程标准的二级目录
+    let sfData = null;
+    try {
+      const saved = localStorage.getItem('workbuddy_service_flow');
+      if (saved) sfData = JSON.parse(saved);
+    } catch(e) {}
+    if (!sfData) sfData = SERVICE_FLOW_EMBEDDED;
+    if (sfData && sfData.modules) {
+      sfData.modules.forEach((mod, mi) => {
+        html += `<div class="doc-toc-item doc-toc-sub"><span class="doc-toc-num">${mi+1}</span><span>${esc(mod.title)}</span></div>`;
+      });
+    }
+  }
   html += `</div>`;
 
-  // ===== Purchasing Materials =====
-  if (standards.purchasingMaterials && standards.purchasingMaterials.length) {
-    html += `<div class="doc-section">
-      <div class="doc-h2">新店需购置定位物料</div>
+  let partIdx = 0;
+  // ===== Part 1: Store Location System (parent section for all areas) =====
+  if (placedAreas.length > 0) {
+    html += `<div class="doc-part-divider"></div>
+      <div class="doc-section">
+      <div class="doc-part-label">第${CN_PARTS[partIdx]}部分</div>
+      <div class="doc-h2">门店定位系统</div>`;
+
+    // 1. 画布布局图（按实际坐标排列）
+    html += `<div style="margin-bottom:20px;">`;
+    html += `<div style="font-size:12px;font-weight:600;color:#2D2116;margin-bottom:10px;">📐 门店平面布局图</div>`;
+    html += buildStoreLayoutHTML();
+    html += `</div>`;
+
+    // 2. 文字详细清单（V8 风格）
+    html += `<div style="font-size:12px;font-weight:600;color:#2D2116;margin:16px 0 10px;padding-top:12px;border-top:2px solid #E5DDD5;">📝 各区域详细清单</div>`;
+
+    let docIdx = 0;
+    standards.areas.forEach(area => {
+      const blocks = placedAreas.filter(block => block.id === area.id);
+      if (blocks.length === 0) return;
+
+      blocks.forEach((block, blockIdx) => {
+      const icon = AREA_ICONS[area.id] || '';
+
+      let sectionTitle = `${icon} ${area.name}`;
+      if (area.id === 'packing-station' && block.num) {
+        const drawerSub = (area.subAreas || []).find(s => s.id === 'packing-upper-drawers');
+        if (drawerSub && drawerSub.drawers) {
+          const drawer = drawerSub.drawers.find(d => d.position === block.num);
+          if (drawer) sectionTitle = `${icon} ${area.name}·${drawer.name || '柜筒'+block.num}`;
+        }
+      }
+      html += `<div class="doc-section">
+        <div class="doc-h3"><span class="doc-h3-num">${docIdx+1}</span>${sectionTitle}</div>`;
+      docIdx++;
+
+      // Description & meta info as a card
+      if (area.description || area.positionRequirement || area.temperature || area.storageMode || area.note) {
+        html += `<div class="doc-card doc-card-meta">
+          <div class="doc-meta-row">${area.description || ''}</div>`;
+        if (area.positionRequirement) html += `<div class="doc-meta-row"><span class="doc-meta-label">位置要求</span>${area.positionRequirement}</div>`;
+        if (area.temperature) html += `<div class="doc-meta-row"><span class="doc-meta-label">温度要求</span>${area.temperature}</div>`;
+        if (area.storageMode) html += `<div class="doc-meta-row"><span class="doc-meta-label">存放模式</span>${area.storageMode}</div>`;
+        if (area.storageRule) html += `<div class="doc-meta-row"><span class="doc-meta-label">存放规则</span>${area.storageRule}</div>`;
+        if (area.note) html += `<div class="doc-meta-row" style="color:var(--text-muted);">${area.note}</div>`;
+        if (area.coreNote) html += `<div class="doc-meta-row" style="color:#D4380D;font-weight:600;">${area.coreNote}</div>`;
+        if (area.rackRequirements) html += `<div class="doc-meta-row"><span class="doc-meta-label">货架要求</span>离地${area.rackRequirements.safetyDistance && area.rackRequirements.safetyDistance.fromGround || ''} / 离墙${area.rackRequirements.safetyDistance && area.rackRequirements.safetyDistance.fromWall || ''} · ${area.rackRequirements.material || ''}材质</div>`;
+        html += `</div>`;
+      }
+
+      // Equipment chips
+      if (area.equipment && area.equipment.length) {
+        html += `<div class="doc-sub-title">设备清单</div>
+          <div class="doc-chips">${area.equipment.map(e => `<span class="doc-chip">${e}</span>`).join('')}</div>`;
+      }
+
+      // SubAreas
+      if (area.subAreas) {
+        area.subAreas.forEach(sub => {
+          if (area.id === 'packing-station' && sub.id === 'packing-lower-cabinet') {
+            const lastPacking = [...placedAreas].reverse().find(a => a.id === 'packing-station');
+            if (lastPacking && lastPacking.instanceId !== block.instanceId) return;
+          }
+          html += `<div class="doc-sub-title">${sub.name}</div>`;
+
+          // Temperature badge for fridge areas
+          if (sub.temperature) {
+            html += `<div class="doc-temp-badge">${sub.temperature}</div>`;
+          }
+
+          if (sub.type === 'sop') {
+            // SOP: show notices as warning cards, then steps table
+            if (sub.notices && sub.notices.length) {
+              html += `<div class="doc-callout doc-callout-warn">`;
+              sub.notices.forEach(n => { html += `<div class="doc-callout-item">${n}</div>`; });
+              html += `</div>`;
+            }
+            html += `<div class="doc-card">
+              <table class="doc-table doc-table-steps">
+                <thead><tr><th style="width:60px;">步骤</th><th style="width:100px;">操作</th><th>细节说明</th></tr></thead>
+                <tbody>`;
+            sub.steps.forEach(s => {
+              html += `<tr><td><div class="doc-step-num">${s.step}</div></td><td><strong>${s.action}</strong></td><td>${s.detail}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+          } else if (sub.drawers) {
+            // Drawers layout
+            let drawersToShow = sub.drawers;
+            if (area.id === 'packing-station' && block.num) {
+              const matched = sub.drawers.find(d => d.position === block.num);
+              if (matched) drawersToShow = [matched];
+            }
+            html += `<div class="doc-card">
+              <table class="doc-table doc-table-stripe">
+                <thead><tr><th style="width:70px;">柜筒</th><th>名称</th><th>存放物品</th><th>隔栏方式</th></tr></thead>
+                <tbody>`;
+            drawersToShow.forEach(d => {
+              const dotClass = d.labelColor === 'blue' ? 'doc-dot-blue' : d.labelColor === 'green' ? 'doc-dot-green' : 'doc-dot-yellow';
+              html += `<tr><td>第${d.position}个</td><td><span class="doc-inline-dot ${dotClass}"></span>${d.name||''}</td><td>${d.items.join('、')}</td><td>${d.partition||'<span style="color:#bbb;">无</span>'}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+          } else if (sub.items) {
+            // Items by category
+            html += `<div class="doc-card">
+              <table class="doc-table doc-table-stripe">
+                <thead><tr><th style="width:50px;">${sub.type==='shelf'?'层位':'序号'}</th><th>分类</th><th>存放物品</th></tr></thead>
+                <tbody>`;
+            sub.items.forEach((cat, ci) => {
+              const dotClass = cat.labelColor === 'blue' ? 'doc-dot-blue' : cat.labelColor === 'green' ? 'doc-dot-green' : 'doc-dot-yellow';
+              const levelText = cat.level ? `第${cat.level}层` : `${ci+1}`;
+              html += `<tr><td>${levelText}</td><td><span class="doc-inline-dot ${dotClass}"></span>${cat.category}</td><td>${cat.items.join('、')}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+          }
+
+          // Display order (sushi-display)
+          if (sub.displayOrder) {
+            html += `<div class="doc-card"><table class="doc-table doc-table-stripe">
+              <thead><tr><th style="width:36px;">#</th><th>分类</th><th>陈列产品</th></tr></thead>
+              <tbody>`;
+            sub.displayOrder.forEach(d => {
+              html += `<tr><td>${d.position}</td><td><strong>${d.category}</strong></td><td>${d.items.join('、')}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+          }
+
+          // Principles
+          if (sub.principles) {
+            html += `<div class="doc-callout doc-callout-info">`;
+            sub.principles.forEach(p => { html += `<div class="doc-callout-item">${p}</div>`; });
+            html += `</div>`;
+          }
+
+          // Daily schedule
+          if (sub.dailySchedule) {
+            html += `<div class="doc-card"><div class="doc-sub-sub-title">日常运营计划</div>
+              <table class="doc-table doc-table-stripe">
+                <thead><tr><th style="width:100px;">时间节点</th><th>工作内容</th></tr></thead>
+                <tbody>`;
+            sub.dailySchedule.forEach(s => {
+              html += `<tr><td><strong>${s.time}</strong></td><td>${s.task}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+          }
+
+          // Prohibited
+          if (sub.prohibited) {
+            html += `<div class="doc-callout doc-callout-warn">
+              <div class="doc-callout-title">禁止事项</div>`;
+            sub.prohibited.forEach(p => { html += `<div class="doc-callout-item">${p}</div>`; });
+            html += `</div>`;
+          }
+
+          // Container suggestion
+          if (sub.containerSuggestion) {
+            const c = sub.containerSuggestion;
+            html += `<div class="doc-callout doc-callout-info">
+              <div class="doc-callout-title">建议容器</div>
+              <div class="doc-callout-item">${c.name}（${c.size}）</div>
+              <div class="doc-callout-item">材质：${c.material} · ${c.suggestedQty}</div>
+            </div>`;
+          }
+
+          // Standards as callout
+          let showStandards = true;
+          if (area.id === 'packing-station' && sub.id === 'packing-upper-drawers') {
+            const lastPacking = [...placedAreas].reverse().find(a => a.id === 'packing-station');
+            if (lastPacking && lastPacking.instanceId !== block.instanceId) showStandards = false;
+          }
+          if (showStandards) {
+            if (Array.isArray(sub.standards) && sub.standards.length) {
+              html += `<div class="doc-callout doc-callout-tip">`;
+              sub.standards.forEach(s => { html += `<div class="doc-callout-item">${s}</div>`; });
+              html += `</div>`;
+            } else if (sub.standards && sub.standards.notes) {
+              html += `<div class="doc-callout doc-callout-tip"><div class="doc-callout-item">${sub.standards.notes}</div></div>`;
+            }
+          }
+
+          // Shelf requirements
+          if (sub.shelfRequirements) {
+            html += `<div class="doc-callout doc-callout-info">
+              <div class="doc-callout-title">层架要求</div>`;
+            sub.shelfRequirements.forEach(r => { html += `<div class="doc-callout-item">${r}</div>`; });
+            html += `</div>`;
+          }
+        });
+      }
+
+      // Area-level standards
+      if (Array.isArray(area.standards) && area.standards.length) {
+        html += `<div class="doc-callout doc-callout-tip">
+          <div class="doc-callout-title">定位标准</div>`;
+        area.standards.forEach(s => { html += `<div class="doc-callout-item">${s}</div>`; });
+        html += `</div>`;
+      } else if (area.standards && area.standards.notes) {
+        html += `<div class="doc-callout doc-callout-tip"><div class="doc-callout-item">${area.standards.notes}</div></div>`;
+      }
+
+      // Replenish flow per area
+      if (area.replenishFlow) {
+        html += `<div class="doc-callout doc-callout-info">
+          <div class="doc-callout-title">补货流转</div>
+          <div class="doc-callout-item">${area.replenishFlow}</div>
+        </div>`;
+      }
+
+      html += `</div>`;
+    });
+  });
+
+    html += `</div>`; // close doc-section
+    partIdx++;
+  }
+
+// ===== Part 2: Purchasing Materials =====
+  if (opts.includePurchasing && standards.purchasingMaterials && standards.purchasingMaterials.length) {
+    html += `<div class="doc-part-divider"></div>
+      <div class="doc-section">
+      <div class="doc-part-label">第${CN_PARTS[partIdx]}部分</div>
+      <div class="doc-h2">需购置物料清单</div>
       <div class="doc-card">
         <table class="doc-table doc-table-stripe">
           <thead><tr><th style="width:36px;">#</th><th>名称</th><th>用途</th><th>采购来源</th><th>单价</th><th>建议数量</th></tr></thead>
@@ -2092,27 +2500,15 @@ function buildDocHTML(storeName) {
     html += `</tbody></table>
       </div>
     </div>`;
+    partIdx++;
   }
 
-  // ===== Replenish Flow =====
-  if (standards.replenishFlow && standards.replenishFlow.steps) {
-    html += `<div class="doc-section">
-      <div class="doc-h2">物料补货流转链路</div>
-      <div class="doc-card">`;
-    standards.replenishFlow.steps.forEach((s, i) => {
-      const isLast = i === standards.replenishFlow.steps.length - 1;
-      html += `<div class="doc-flow-step">
-        <div class="doc-flow-dot"></div>
-        ${!isLast ? '<div class="doc-flow-line"></div>' : ''}
-        <div class="doc-flow-text">${s}</div>
-      </div>`;
-    });
-    html += `</div></div>`;
-  }
-
-  // ===== Label Color System =====
-  if (standards.labelColorSystem) {
-    html += `<div class="doc-section">
+  
+// ===== Part 3: Label Color System =====
+  if (opts.includeLabelSystem && standards.labelColorSystem) {
+    html += `<div class="doc-part-divider"></div>
+      <div class="doc-section">
+      <div class="doc-part-label">第${CN_PARTS[partIdx]}部分</div>
       <div class="doc-h2">标示牌颜色系统</div>
       <div class="doc-label-system">
         <div class="doc-label-card doc-label-yellow">
@@ -2132,203 +2528,97 @@ function buildDocHTML(storeName) {
         </div>
       </div>
     </div>`;
+    partIdx++;
   }
 
-  // ===== Each Area =====
-  placedAreas.forEach((block, idx) => {
-    const area = standards.areas.find(a => a.id === block.id);
-    if (!area) return;
-    const icon = AREA_ICONS[block.id] || '';
-
-    let sectionTitle = `${icon} ${area.name}`;
-    if (area.id === 'packing-station' && block.num) {
-      const drawerSub = (area.subAreas || []).find(s => s.id === 'packing-upper-drawers');
-      if (drawerSub && drawerSub.drawers) {
-        const drawer = drawerSub.drawers.find(d => d.position === block.num);
-        if (drawer) sectionTitle = `${icon} ${area.name}·${drawer.name || '柜筒'+block.num}`;
-      }
-    }
-    html += `<div class="doc-section">
-      <div class="doc-h2"><span class="doc-h2-num">${idx+1}</span>${sectionTitle}</div>`;
-
-    // Description & meta info as a card
-    if (area.description || area.positionRequirement || area.temperature || area.storageMode || area.note) {
-      html += `<div class="doc-card doc-card-meta">
-        <div class="doc-meta-row">${area.description || ''}</div>`;
-      if (area.positionRequirement) html += `<div class="doc-meta-row"><span class="doc-meta-label">位置要求</span>${area.positionRequirement}</div>`;
-      if (area.temperature) html += `<div class="doc-meta-row"><span class="doc-meta-label">温度要求</span>${area.temperature}</div>`;
-      if (area.storageMode) html += `<div class="doc-meta-row"><span class="doc-meta-label">存放模式</span>${area.storageMode}</div>`;
-      if (area.storageRule) html += `<div class="doc-meta-row"><span class="doc-meta-label">存放规则</span>${area.storageRule}</div>`;
-      if (area.note) html += `<div class="doc-meta-row" style="color:var(--text-muted);">${area.note}</div>`;
-      if (area.coreNote) html += `<div class="doc-meta-row" style="color:#D4380D;font-weight:600;">${area.coreNote}</div>`;
-      if (area.rackRequirements) html += `<div class="doc-meta-row"><span class="doc-meta-label">货架要求</span>离地${area.rackRequirements.safetyDistance && area.rackRequirements.safetyDistance.fromGround || ''} / 离墙${area.rackRequirements.safetyDistance && area.rackRequirements.safetyDistance.fromWall || ''} · ${area.rackRequirements.material || ''}材质</div>`;
-      html += `</div>`;
-    }
-
-    // Equipment chips
-    if (area.equipment && area.equipment.length) {
-      html += `<div class="doc-sub-title">设备清单</div>
-        <div class="doc-chips">${area.equipment.map(e => `<span class="doc-chip">${e}</span>`).join('')}</div>`;
-    }
-
-    // SubAreas
-    if (area.subAreas) {
-      area.subAreas.forEach(sub => {
-        if (area.id === 'packing-station' && sub.id === 'packing-lower-cabinet') {
-          const lastPacking = [...placedAreas].reverse().find(a => a.id === 'packing-station');
-          if (lastPacking && lastPacking.instanceId !== block.instanceId) return;
-        }
-        html += `<div class="doc-sub-title">${sub.name}</div>`;
-
-        // Temperature badge for fridge areas
-        if (sub.temperature) {
-          html += `<div class="doc-temp-badge">${sub.temperature}</div>`;
-        }
-
-        if (sub.type === 'sop') {
-          // SOP: show notices as warning cards, then steps table
-          if (sub.notices && sub.notices.length) {
-            html += `<div class="doc-callout doc-callout-warn">`;
-            sub.notices.forEach(n => { html += `<div class="doc-callout-item">${n}</div>`; });
-            html += `</div>`;
-          }
-          html += `<div class="doc-card">
-            <table class="doc-table doc-table-steps">
-              <thead><tr><th style="width:60px;">步骤</th><th style="width:100px;">操作</th><th>细节说明</th></tr></thead>
-              <tbody>`;
-          sub.steps.forEach(s => {
-            html += `<tr><td><div class="doc-step-num">${s.step}</div></td><td><strong>${s.action}</strong></td><td>${s.detail}</td></tr>`;
-          });
-          html += `</tbody></table></div>`;
-        } else if (sub.drawers) {
-          // Drawers layout
-          let drawersToShow = sub.drawers;
-          if (area.id === 'packing-station' && block.num) {
-            const matched = sub.drawers.find(d => d.position === block.num);
-            if (matched) drawersToShow = [matched];
-          }
-          html += `<div class="doc-card">
-            <table class="doc-table doc-table-stripe">
-              <thead><tr><th style="width:70px;">柜筒</th><th>名称</th><th>存放物品</th><th>隔栏方式</th></tr></thead>
-              <tbody>`;
-          drawersToShow.forEach(d => {
-            const dotClass = d.labelColor === 'blue' ? 'doc-dot-blue' : d.labelColor === 'green' ? 'doc-dot-green' : 'doc-dot-yellow';
-            html += `<tr><td>第${d.position}个</td><td><span class="doc-inline-dot ${dotClass}"></span>${d.name||''}</td><td>${d.items.join('、')}</td><td>${d.partition||'<span style="color:#bbb;">无</span>'}</td></tr>`;
-          });
-          html += `</tbody></table></div>`;
-        } else if (sub.items) {
-          // Items by category
-          html += `<div class="doc-card">
-            <table class="doc-table doc-table-stripe">
-              <thead><tr><th style="width:50px;">${sub.type==='shelf'?'层位':'序号'}</th><th>分类</th><th>存放物品</th></tr></thead>
-              <tbody>`;
-          sub.items.forEach((cat, ci) => {
-            const dotClass = cat.labelColor === 'blue' ? 'doc-dot-blue' : cat.labelColor === 'green' ? 'doc-dot-green' : 'doc-dot-yellow';
-            const levelText = cat.level ? `第${cat.level}层` : `${ci+1}`;
-            html += `<tr><td>${levelText}</td><td><span class="doc-inline-dot ${dotClass}"></span>${cat.category}</td><td>${cat.items.join('、')}</td></tr>`;
-          });
-          html += `</tbody></table></div>`;
-        }
-
-        // Display order (sushi-display)
-        if (sub.displayOrder) {
-          html += `<div class="doc-card"><table class="doc-table doc-table-stripe">
-            <thead><tr><th style="width:36px;">#</th><th>分类</th><th>陈列产品</th></tr></thead>
-            <tbody>`;
-          sub.displayOrder.forEach(d => {
-            html += `<tr><td>${d.position}</td><td><strong>${d.category}</strong></td><td>${d.items.join('、')}</td></tr>`;
-          });
-          html += `</tbody></table></div>`;
-        }
-
-        // Principles
-        if (sub.principles) {
-          html += `<div class="doc-callout doc-callout-info">`;
-          sub.principles.forEach(p => { html += `<div class="doc-callout-item">${p}</div>`; });
-          html += `</div>`;
-        }
-
-        // Daily schedule
-        if (sub.dailySchedule) {
-          html += `<div class="doc-card"><div class="doc-sub-sub-title">日常运营计划</div>
-            <table class="doc-table doc-table-stripe">
-              <thead><tr><th style="width:100px;">时间节点</th><th>工作内容</th></tr></thead>
-              <tbody>`;
-          sub.dailySchedule.forEach(s => {
-            html += `<tr><td><strong>${s.time}</strong></td><td>${s.task}</td></tr>`;
-          });
-          html += `</tbody></table></div>`;
-        }
-
-        // Prohibited
-        if (sub.prohibited) {
-          html += `<div class="doc-callout doc-callout-warn">
-            <div class="doc-callout-title">禁止事项</div>`;
-          sub.prohibited.forEach(p => { html += `<div class="doc-callout-item">${p}</div>`; });
-          html += `</div>`;
-        }
-
-        // Container suggestion
-        if (sub.containerSuggestion) {
-          const c = sub.containerSuggestion;
-          html += `<div class="doc-callout doc-callout-info">
-            <div class="doc-callout-title">建议容器</div>
-            <div class="doc-callout-item">${c.name}（${c.size}）</div>
-            <div class="doc-callout-item">材质：${c.material} · ${c.suggestedQty}</div>
-          </div>`;
-        }
-
-        // Standards as callout
-        let showStandards = true;
-        if (area.id === 'packing-station' && sub.id === 'packing-upper-drawers') {
-          const lastPacking = [...placedAreas].reverse().find(a => a.id === 'packing-station');
-          if (lastPacking && lastPacking.instanceId !== block.instanceId) showStandards = false;
-        }
-        if (showStandards) {
-          if (Array.isArray(sub.standards) && sub.standards.length) {
-            html += `<div class="doc-callout doc-callout-tip">`;
-            sub.standards.forEach(s => { html += `<div class="doc-callout-item">${s}</div>`; });
-            html += `</div>`;
-          } else if (sub.standards && sub.standards.notes) {
-            html += `<div class="doc-callout doc-callout-tip"><div class="doc-callout-item">${sub.standards.notes}</div></div>`;
-          }
-        }
-
-        // Shelf requirements
-        if (sub.shelfRequirements) {
-          html += `<div class="doc-callout doc-callout-info">
-            <div class="doc-callout-title">层架要求</div>`;
-          sub.shelfRequirements.forEach(r => { html += `<div class="doc-callout-item">${r}</div>`; });
-          html += `</div>`;
-        }
-      });
-    }
-
-    // Area-level standards
-    if (Array.isArray(area.standards) && area.standards.length) {
-      html += `<div class="doc-callout doc-callout-tip">
-        <div class="doc-callout-title">定位标准</div>`;
-      area.standards.forEach(s => { html += `<div class="doc-callout-item">${s}</div>`; });
-      html += `</div>`;
-    } else if (area.standards && area.standards.notes) {
-      html += `<div class="doc-callout doc-callout-tip"><div class="doc-callout-item">${area.standards.notes}</div></div>`;
-    }
-
-    // Replenish flow per area
-    if (area.replenishFlow) {
-      html += `<div class="doc-callout doc-callout-info">
-        <div class="doc-callout-title">补货流转</div>
-        <div class="doc-callout-item">${area.replenishFlow}</div>
+  
+// ===== Part 4: Replenish Flow =====
+  if (opts.includeReplenish && standards.replenishFlow && standards.replenishFlow.steps) {
+    html += `<div class="doc-part-divider"></div>
+      <div class="doc-section">
+      <div class="doc-part-label">第${CN_PARTS[partIdx]}部分</div>
+      <div class="doc-h2">补货流转链路</div>
+      <div class="doc-card">`;
+    standards.replenishFlow.steps.forEach((s, i) => {
+      const isLast = i === standards.replenishFlow.steps.length - 1;
+      html += `<div class="doc-flow-step">
+        <div class="doc-flow-dot"></div>
+        ${!isLast ? '<div class="doc-flow-line"></div>' : ''}
+        <div class="doc-flow-text">${s}</div>
       </div>`;
-    }
+    });
+    html += `</div></div>`;
+    partIdx++;
+  }
 
-    html += `</div>`;
-  });
+  
+// ===== Part 5: Service Flow =====
+  if (opts.includeServiceFlow) {
+    html += `<div class="doc-part-divider"></div>`;
+    html += `  <div class="doc-section">`;
+    html += `  <div class="doc-part-label">第${CN_PARTS[partIdx]}部分</div>`;
+    let sfData = null;
+    try {
+      const saved = localStorage.getItem('workbuddy_service_flow');
+      if (saved) sfData = JSON.parse(saved);
+    } catch(e) {}
+    if (!sfData) sfData = SERVICE_FLOW_EMBEDDED;
+
+    if (sfData && sfData.modules) {
+      html += `<div class="doc-section">
+      <div class="doc-h2">服务流程标准</div>
+        <div style="background:#FFF8F0;padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:12px;color:#8B6914;border-left:3px solid #E8A020;">
+          <strong>适用范围：</strong>${esc(sfData.scope || '所有门店通用')}
+        </div>`;
+
+      sfData.modules.forEach(mod => {
+        html += `<div style="margin-bottom:18px;padding:14px;background:#FAF8F5;border-radius:8px;border:1px solid #F0EBE4;">`;
+        html += `<div style="font-size:14px;font-weight:700;color:#2D2116;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #E8A020;">
+          <span style="display:inline-block;background:#E8A020;color:white;width:24px;height:24px;line-height:24px;text-align:center;border-radius:6px;margin-right:8px;font-size:12px;">${mod.num}</span>
+          ${esc(mod.title)}
+        </div>`;
+
+        (mod.sections||[]).forEach(sec => {
+          html += `<div style="margin-bottom:12px;">`;
+          html += `<div style="font-size:12px;font-weight:600;color:#E8A020;margin-bottom:6px;">▎ ${esc(sec.title)}</div>`;
+          (sec.content||[]).forEach(item => {
+            if (item.type==='table') {
+              html += `<table style="width:100%;border-collapse:collapse;font-size:11px;margin:4px 0;"><thead><tr style="background:#F5F0EB;">`;
+              (item.headers||[]).forEach(h => { html += `<th style="padding:6px 8px;border:1px solid #E5DDD5;text-align:left;">${esc(h)}</th>`; });
+              html += `</tr></thead><tbody>`;
+              (item.rows||[]).forEach(row => {
+                html += `<tr>`;
+                row.forEach(cell => { html += `<td style="padding:5px 8px;border:1px solid #E5DDD5;">${esc(cell)}</td>`; });
+                html += `</tr>`;
+              });
+              html += `</tbody></table>`;
+            } else if (item.type==='steps') {
+              html += `<ol style="margin:4px 0;padding-left:20px;font-size:11px;line-height:1.8;">`;
+              (item.items||[]).forEach(it => { html += `<li>${esc(it)}</li>`; });
+              html += `</ol>`;
+            } else if (item.type==='bullet') {
+              html += `<ul style="margin:4px 0;padding-left:20px;font-size:11px;line-height:1.8;">`;
+              (item.items||[]).forEach(it => { html += `<li>${esc(it)}</li>`; });
+              html += `</ul>`;
+            } else if (item.type==='callout') {
+              html += `<div style="background:#FFF8E6;padding:8px 12px;border-radius:6px;font-size:11px;margin:4px 0;color:#8B6914;border-left:3px solid #E8A020;">💡 ${esc(item.text||'').replace(/\n/g,'<br>')}</div>`;
+            } else if (item.type==='code') {
+              html += `<div style="background:#2D2116;color:#E8A020;padding:8px 12px;border-radius:6px;font-size:11px;font-family:monospace;margin:4px 0;">${esc(item.text||'').replace(/\n/g,'<br>')}</div>`;
+            }
+          });
+          html += `</div>`;
+        });
+        html += `</div>`;
+      });
+      html += `</div>`;
+    }
+    partIdx++;
+  }
 
   // ===== Footer =====
   html += `<div class="doc-footer">
     <div class="doc-footer-line"></div>
-    苍井寿司 · 门店物料定位标准文档
+    苍井寿司 · 门店营运标准手册
   </div>`;
 
   return html;
@@ -2351,7 +2641,7 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;max-w
 .doc-cover-line{width:40px;height:3px;background:var(--brand);margin:0 auto 16px;border-radius:2px;}
 .doc-cover-meta{font-size:12px;color:var(--text3);}
 /* TOC */
-.doc-toc{padding:20px 24px;background:var(--bg);border-radius:var(--radius);margin-bottom:28px;}
+.doc-toc{padding:20px 24px;background:var(--bg);border-radius:var(--radius);margin-bottom:28px;;break-after:always;page-break-after:always;}
 .doc-toc-title{font-size:15px;font-weight:600;margin-bottom:12px;color:var(--text);}
 .doc-toc-item{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:13px;color:var(--text2);}
 .doc-toc-num{width:22px;height:22px;display:flex;align-items:center;justify-content:center;background:var(--brand-bg);color:var(--brand);font-size:11px;font-weight:700;border-radius:4px;flex-shrink:0;}
@@ -2359,6 +2649,9 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;max-w
 .doc-section{margin-bottom:28px;}
 .doc-h2{font-size:18px;font-weight:700;display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;border-radius:6px;flex-shrink:0;}
+.doc-h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--border);color:var(--text);}
+.doc-h3-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:var(--text2);color:#fff;font-size:10px;font-weight:700;border-radius:4px;flex-shrink:0;}
+.doc-toc-sub{padding-left:28px;}
 .doc-sub-title{font-size:14px;font-weight:600;color:var(--text);margin:14px 0 8px;padding-left:10px;border-left:3px solid var(--brand);}
 .doc-sub-sub-title{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:8px;}
 /* Cards */
@@ -2403,12 +2696,26 @@ body{font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;max-w
 /* Footer */
 .doc-footer{text-align:center;padding:24px 0 12px;font-size:11px;color:var(--text3);line-height:1.8;}
 .doc-footer-line{width:40px;height:1px;background:var(--border);margin:0 auto 12px;}
+.doc-part-divider{page-break-before:always;margin:40px 0 32px;border-top:3px solid var(--brand);position:relative;}
+.doc-part-label{font-size:20px;font-weight:800;color:var(--brand);margin-bottom:14px;letter-spacing:3px;}
 @media print{body{padding:16px;}.doc-section{break-inside:avoid;}}
-</style></head><body>${html}</body></html>`;
+</style></head><body>${html}
+<!-- Service Flow Modal -->
+<div class="modal-overlay" id="sfModal" style="display:none;">
+  <div style="background:white;border-radius:14px;width:92%;max-width:920px;max-height:88vh;overflow-y:auto;padding:24px 28px;position:relative;box-shadow:0 16px 64px rgba(45,33,22,0.25);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid var(--brand);">
+      <div style="font-size:18px;font-weight:800;color:var(--text);">📋 服务流程标准</div>
+      <button onclick="saveServiceFlow()" style="background:var(--green);color:white;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;margin-right:10px;">💾 保存修改</button><button onclick="closeServiceFlow()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted);line-height:1;">✕</button>
+    </div>
+    <div id="sfContent"></div>
+  </div>
+</div>
+
+</body></html>`;
   const blob = new Blob([full], {type:'text/html;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `${storeName}_物料定位标准.html`; a.click();
+  a.href = url; a.download = `${storeName}_营运标准手册.html`; a.click();
   URL.revokeObjectURL(url);
   showToast('✅ HTML已导出');
 }
@@ -2432,7 +2739,7 @@ function downloadCSV() {
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `${storeName}_物料定位标准.csv`; a.click();
+  a.href = url; a.download = `${storeName}_营运标准手册.csv`; a.click();
   URL.revokeObjectURL(url);
   showToast('✅ CSV已导出');
 }
@@ -2452,13 +2759,16 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-cover-sub{font-size:13px;color:#8C7A66;margin-bottom:16px;}
 .doc-cover-line{width:32px;height:2px;background:#E8A020;margin:0 auto 12px;border-radius:2px;}
 .doc-cover-meta{font-size:11px;color:#8C7A66;}
-.doc-toc{padding:14px 16px;background:#F5F0EB;border-radius:6px;margin-bottom:20px;}
-.doc-toc-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.doc-toc{padding:14px 16px;background:#F5F0EB;border-radius:6px;margin-bottom:20px;;break-after:always;page-break-after:always;}
+.doc-toc-title{font-size:18px;font-weight:800;margin-bottom:14px;color:var(--text);letter-spacing:6px;text-align:center;}
 .doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:#8C7A66;}
 .doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
 .doc-section { margin-bottom: 20px; }
 .doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;}
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
+.doc-h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #E5DDD5;color:#2D2116;}
+.doc-h3-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#8C7A66;color:#fff;font-size:9px;font-weight:700;border-radius:4px;flex-shrink:0;}
+.doc-toc-sub{padding-left:28px;}
 .doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;}
 .doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
 .doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;}
@@ -2481,6 +2791,8 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-label-usage{font-size:10px;color:#8C7A66;}
 .doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:#8C7A66;line-height:1.6;}
 .doc-footer-line{width:32px;height:1px;background:#E5DDD5;margin:0 auto 8px;}
+.doc-part-divider{page-break-before:always;margin:40px 0 32px;border-top:3px solid #E8A020;position:relative;}
+.doc-part-label{font-size:20px;font-weight:800;color:#E8A020;margin-bottom:14px;letter-spacing:3px;}
 .doc-table{width:100%;border-collapse:collapse;font-size:10px;}
 .doc-table thead th{background:#F5F0EB;font-weight:600;color:#8C7A66;padding:5px 8px;text-align:left;border-bottom:2px solid #E5DDD5;font-size:10px;white-space:nowrap;}
 .doc-table tbody td{padding:5px 8px;border-bottom:1px solid #F2F0ED;color:#1F2329;font-size:10px;}
@@ -2503,7 +2815,7 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${storeName} 物料定位标准</title>
+<title>${storeName} 营运标准手册</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>
 <style>${imgStyles}</style>
 </head>
@@ -2522,7 +2834,7 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
       windowWidth: 800
     }).then(canvas => {
       const link = win.document.createElement('a');
-      link.download = '${storeName}_物料定位标准.png';
+      link.download = '${storeName}_营运标准手册.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
       showToast('✅ 长图已导出');
@@ -2541,9 +2853,9 @@ function downloadPDF() {
 
   const bodyHTML = document.getElementById('exportBody').innerHTML;
 
-  // v4 — 改用浏览器原生打印，CSS 分页控制真正生效
+  // v6 — 强制打印时保留背景色（浏览器默认会屏蔽 background）
   const printStyles = `
-* { margin:0; padding:0; box-sizing:border-box; }
+* { margin:0; padding:0; box-sizing:border-box; -webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important; }
 body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; color:#1F2329; background:#fff; font-size:12.5px; line-height:1.6; }
 @page { margin: 20mm; size: A4 portrait; }
 .doc-cover{text-align:center;padding:36px 0 24px;page-break-inside:avoid;}
@@ -2552,24 +2864,44 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-cover-sub{font-size:13px;color:#8C7A66;margin-bottom:16px;}
 .doc-cover-line{width:32px;height:2px;background:#E8A020;margin:0 auto 12px;border-radius:2px;}
 .doc-cover-meta{font-size:11px;color:#8C7A66;}
-.doc-toc{padding:14px 16px;background:#F5F0EB;border-radius:6px;margin-bottom:20px;page-break-inside:avoid;}
-.doc-toc-title{font-size:13px;font-weight:600;margin-bottom:8px;}
+.doc-toc{padding:14px 16px;background:#F5F0EB;border-radius:6px;margin-bottom:20px;break-after:always;page-break-after:always;}
+.doc-toc-title{font-size:18px;font-weight:800;margin-bottom:14px;color:#1F2329;letter-spacing:6px;text-align:center;}
 .doc-toc-item{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:11px;color:#8C7A66;}
 .doc-toc-num{width:18px;height:18px;display:flex;align-items:center;justify-content:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;flex-shrink:0;}
 .doc-section { margin-bottom: 20px; }
-.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;page-break-after:avoid;break-after:avoid;}
+.doc-h2{font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #E5DDD5;break-after:avoid;page-break-after:avoid;}
 .doc-h2-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:#E8A020;color:#fff;font-size:10px;font-weight:700;border-radius:5px;flex-shrink:0;}
-.doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;page-break-after:avoid;break-after:avoid;}
+.doc-h3{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px dashed #E5DDD5;color:#2D2116;}
+.doc-h3-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#8C7A66;color:#fff;font-size:9px;font-weight:700;border-radius:4px;flex-shrink:0;}
+.doc-toc-sub{padding-left:28px;}
+.doc-sub-title{font-size:12px;font-weight:600;color:#2D2116;margin:10px 0 6px;padding-left:8px;border-left:3px solid #E8A020;break-after:avoid;page-break-after:avoid;}
 .doc-sub-sub-title{font-size:11px;font-weight:600;color:#8C7A66;margin-bottom:6px;}
-.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;page-break-inside:avoid;break-inside:avoid;}
+.doc-card{background:#FFFFFF;border:1px solid #E5DDD5;border-radius:6px;padding:10px 12px;margin-bottom:8px;overflow-x:auto;break-inside:avoid;page-break-inside:avoid;}
 .doc-card-meta{background:#F5F0EB;border:none;}
-.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;page-break-inside:avoid;break-inside:avoid;}
+.doc-meta-row{font-size:10px;color:#8C7A66;padding:2px 0;}
+.doc-meta-label{display:inline-block;background:#FFF3D6;color:#C4851A;font-weight:600;font-size:10px;padding:0 6px;border-radius:3px;margin-right:6px;}
+.doc-table{width:100%;border-collapse:collapse;font-size:10px;}
+.doc-table thead th{background:#F5F0EB;font-weight:600;color:#8C7A66;padding:5px 8px;text-align:left;border-bottom:2px solid #E5DDD5;font-size:10px;white-space:nowrap;break-after:avoid;page-break-after:avoid;}
+.doc-table tbody td{padding:5px 8px;border-bottom:1px solid #F2F0ED;color:#2D2116;font-size:10px;}
+.doc-table tbody tr:last-child td{border-bottom:none;}
+.doc-table tbody tr{break-inside:avoid;page-break-inside:avoid;}
+.doc-table-stripe tbody tr:nth-child(even){background:#FAFAF8;}
+.doc-table-steps tbody td{vertical-align:top;}
+.doc-step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#FFF3D6;color:#C4851A;font-weight:700;font-size:10px;border-radius:50%;}
+.doc-chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0;}
+.doc-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;}
+/* 色点 — 分类颜色标记 */
+.doc-inline-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle;flex-shrink:0;}
+.doc-dot-yellow{background:#F5A623;}
+.doc-dot-blue{background:#1A6FBA;}
+.doc-dot-green{background:#7CB342;}
+.doc-callout{border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:10px;line-height:1.6;break-inside:avoid;page-break-inside:avoid;}
 .doc-callout-warn{background:#FEF0F0;border-left:3px solid #D4380D;color:#CB2634;}
 .doc-callout-info{background:#E8F0FF;border-left:3px solid #1A6FBA;color:#1F65D7;}
 .doc-callout-tip{background:#E8F8ED;border-left:3px solid #283C02;color:#1A8A3E;}
 .doc-callout-title{font-weight:600;margin-bottom:4px;}
 .doc-callout-item{padding:1px 0;}
-.doc-flow-step{display:flex;gap:8px;padding:4px 0;position:relative;min-height:20px;page-break-inside:avoid;}
+.doc-flow-step{display:flex;gap:8px;padding:4px 0;position:relative;min-height:20px;break-inside:avoid;page-break-inside:avoid;}
 .doc-flow-dot{width:8px;height:8px;border-radius:50%;background:#E8A020;margin-top:4px;flex-shrink:0;z-index:1;}
 .doc-flow-line{position:absolute;left:3.5px;top:14px;width:1px;height:calc(100% - 4px);background:#E5DDD5;}
 .doc-flow-text{font-size:10px;color:#2D2116;line-height:1.5;}
@@ -2581,24 +2913,60 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 .doc-label-usage{font-size:10px;color:#8C7A66;}
 .doc-footer{text-align:center;padding:16px 0 8px;font-size:10px;color:#8C7A66;line-height:1.6;}
 .doc-footer-line{width:32px;height:1px;background:#E5DDD5;margin:0 auto 8px;}
-.doc-table{width:100%;border-collapse:collapse;font-size:10px;}
-.doc-table thead th{background:#F5F0EB;font-weight:600;color:#8C7A66;padding:5px 8px;text-align:left;border-bottom:2px solid #E5DDD5;font-size:10px;white-space:nowrap;page-break-after:avoid;break-after:avoid;}
-.doc-table tbody td{padding:5px 8px;border-bottom:1px solid #F2F0ED;color:#1F2329;font-size:10px;}
-.doc-table tbody tr:last-child td{border-bottom:none;}
-.doc-table tbody tr{page-break-inside:avoid;break-inside:avoid;}
-.doc-table-stripe tbody tr:nth-child(even){background:#FAFAF8;}
-.doc-table-steps tbody td{vertical-align:top;}
-.doc-step-num{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;background:#FFF3D6;color:#C4851A;font-size:10px;font-weight:700;border-radius:3px;padding:0 4px;}
-.doc-chips{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0;}
-.doc-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;}
-.doc-inline-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle;}
-.doc-dot-yellow{background:#F5C542;}
-.doc-dot-blue{background:#5B9BD5;}
-.doc-dot-green{background:#70AD47;}
+.doc-part-divider{margin:32px 0 24px;border-top:3px solid #E8A020;position:relative;}
+.doc-part-label{font-size:20px;font-weight:800;color:#E8A020;margin-bottom:14px;letter-spacing:3px;}
+
+/* 门店定位系统 — 区域色块卡片（复刻画布模块外观） */
+.doc-area-block{margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #E5DDD5;break-inside:avoid;page-break-inside:avoid;}
+.doc-area-block-header{color:#fff;padding:7px 12px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.doc-area-block-header .doc-area-icon{font-size:13px;}
+.doc-area-block-header .doc-area-num{margin-left:auto;font-size:9px;opacity:0.8;}
+.doc-area-block-body{padding:8px 12px;background:#fff;font-size:10px;line-height:1.7;}
+.doc-area-block-body .doc-area-desc{color:#8C7A66;margin-bottom:6px;font-size:10px;}
+.doc-area-block-body .doc-area-meta{color:#8C7A66;font-size:9px;margin-bottom:4px;}
+.doc-area-block-body .doc-area-meta-label{font-weight:600;color:#C4851A;}
+.doc-area-block-body .doc-area-subtitle{font-size:11px;font-weight:600;color:#2D2116;margin:8px 0 4px;padding-left:6px;border-left:2px solid #E8A020;}
+.doc-area-block-body .doc-area-items{margin:2px 0 4px;padding-left:10px;}
+.doc-area-block-body .doc-area-item{font-size:10px;color:#2D2116;}
+.doc-area-block-body .doc-area-callout{padding:4px 8px;margin:4px 0;border-radius:4px;font-size:9px;line-height:1.6;}
+.doc-area-block-body .doc-area-callout-warn{background:#FEF0F0;border-left:2px solid #D4380D;color:#CB2634;}
+.doc-area-block-body .doc-area-callout-info{background:#E8F0FF;border-left:2px solid #1A6FBA;color:#1F65D7;}
+.doc-area-block-body .doc-area-callout-tip{background:#E8F8ED;border-left:2px solid #283C02;color:#1A8A3E;}
+.doc-area-block-body .doc-area-table{width:100%;border-collapse:collapse;font-size:9px;margin:4px 0;}
+.doc-area-block-body .doc-area-table th{background:#F5F0EB;padding:3px 6px;text-align:left;font-weight:600;color:#8C7A66;border-bottom:1px solid #E5DDD5;}
+.doc-area-block-body .doc-area-table td{padding:3px 6px;border-bottom:1px solid #F2F0ED;color:#2D2116;}
+
+/* 门店定位系统 — 区域内容（设备/物料/陈列） */
+.placed-block-subtitle{font-size:11px;font-weight:600;color:#2D2116;margin:8px 0 4px;padding-left:6px;border-left:2px solid #E8A020;}
+.placed-block-equip{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 6px;}
+.placed-block-chip{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;background:#F5F0EB;color:#2D2116;}
+.placed-block-row{display:flex;align-items:flex-start;gap:6px;padding:2px 0;font-size:10px;line-height:1.6;}
+.placed-block-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px;}
+.placed-block-dot.dot-yellow{background:#F5C542;}
+.placed-block-dot.dot-blue{background:#5B9BD5;}
+.placed-block-dot.dot-green{background:#70AD47;}
+.placed-block-row-items{flex:1;word-break:break-all;line-height:1.6;}
+
+/* 门店平面布局图 */
+.doc-store-layout{background:#F7F5F2;border:1px solid #E5DDD5;border-radius:8px;display:flex;flex-direction:column;gap:12px;padding:12px;}
+.doc-store-row{display:flex;flex-wrap:wrap;gap:12px;}
+.doc-store-block{border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.08);display:flex;flex-direction:column;flex-shrink:0;}
+.doc-store-header{color:#fff;padding:4px 8px;font-size:9px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;}
+.doc-store-header .doc-store-icon{font-size:10px;flex-shrink:0;}
+.doc-store-header .doc-store-name{flex:1;overflow:hidden;text-overflow:ellipsis;}
+.doc-store-header .doc-store-num{margin-left:auto;font-size:8px;opacity:0.8;flex-shrink:0;}
+.doc-store-body{background:#fff;padding:4px 6px;font-size:8px;line-height:1.5;flex:1;}
+.doc-store-body .placed-block-subtitle{font-size:8px;margin:2px 0 1px;padding-left:4px;border-left-width:1px;}
+.doc-store-body .placed-block-equip{gap:2px;margin:1px 0;}
+.doc-store-body .placed-block-chip{padding:0 3px;font-size:7px;}
+.doc-store-body .placed-block-row{padding:1px 0;font-size:8px;gap:3px;}
+.doc-store-body .placed-block-dot{width:5px;height:5px;margin-top:1px;}
+.doc-store-body .placed-block-row-items{line-height:1.4;}
+
 @media print {
-  .doc-callout, .doc-card, .doc-flow-step, .doc-toc, .doc-cover { page-break-inside:avoid; break-inside:avoid; }
-  .doc-h2, .doc-sub-title, .doc-table thead { page-break-after:avoid; break-after:avoid; }
   body { padding:0; }
+  .doc-callout, .doc-card, .doc-flow-step, .doc-toc, .doc-cover { break-inside:avoid; page-break-inside:avoid; }
+  .doc-h2, .doc-sub-title, .doc-table thead { break-after:avoid; page-break-after:avoid; }
 }
 `;
 
@@ -2609,7 +2977,7 @@ body { font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; co
 <html>
 <head>
 <meta charset="UTF-8">
-<title>${storeName} 物料定位标准</title>
+<title>${storeName} 营运标准手册</title>
 <style>${printStyles}</style>
 </head>
 <body>${bodyHTML}</body>
@@ -2654,6 +3022,10 @@ async function refreshFromGitHub() {
       const bytes = Uint8Array.from(raw, c => c.charCodeAt(0));
       const text = new TextDecoder().decode(bytes);
       const parsed = JSON.parse(text);
+      // 验证数据有效性
+      if (!parsed || !Array.isArray(parsed.areas) || parsed.areas.length === 0) {
+        throw new Error('Invalid data: empty or missing areas');
+      }
       standards = parsed;
       localStorage.setItem('store_standards_cache', JSON.stringify(parsed));
 
@@ -2683,6 +3055,70 @@ async function refreshFromGitHub() {
 }
 
 // ============ UTILS ============
+function loadTemplate() {
+  if (placedAreas.length && !confirm('加载模板将替换当前内容？')) return;
+  clearAll();
+
+  const storeType = document.getElementById('storeType').value || 'standard';
+  const isMall = storeType === 'mall';
+  document.getElementById('storeName').value = isMall ? '苍井寿司·商场店' : '苍井寿司·标准店';
+
+  // ===== 标准店模版（12 区块） =====
+  const STANDARD_TEMPLATE = [
+    { id: 'cashier',         x: 20,  y: 20,  w: 200, h: 140 },
+    { id: 'serving-window',  x: 260, y: 20,  w: 200, h: 140 },
+    { id: 'packing-station', x: 20,  y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 240, y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 460, y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 680, y: 180, w: 200, h: 160 },
+    { id: 'nigiri-workstation', x: 20,  y: 360, w: 420, h: 200 },
+    { id: 'gunkan-workstation', x: 460, y: 360, w: 420, h: 200 },
+    { id: 'prep-workstation',   x: 20,  y: 580, w: 240, h: 240 },
+    { id: 'storage-shelf',  x: 20,  y: 840, w: 240, h: 160 },
+    { id: 'rice-cooking',   x: 280, y: 840, w: 160, h: 140 },
+    { id: 'freezer',        x: 460, y: 840, w: 420, h: 160 },
+  ];
+
+  // ===== 商场店模版（13 区块，含寿司展示柜） =====
+  const MALL_TEMPLATE = [
+    { id: 'cashier',         x: 20,  y: 20,  w: 200, h: 140 },
+    { id: 'serving-window',  x: 240, y: 20,  w: 200, h: 140 },
+    { id: 'sushi-display',   x: 460, y: 20,  w: 420, h: 140 },
+    { id: 'packing-station', x: 20,  y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 240, y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 460, y: 180, w: 200, h: 160 },
+    { id: 'packing-station', x: 680, y: 180, w: 200, h: 160 },
+    { id: 'nigiri-workstation', x: 20,  y: 360, w: 420, h: 200 },
+    { id: 'gunkan-workstation', x: 460, y: 360, w: 420, h: 200 },
+    { id: 'prep-workstation',   x: 20,  y: 580, w: 240, h: 240 },
+    { id: 'storage-shelf',  x: 20,  y: 840, w: 240, h: 160 },
+    { id: 'rice-cooking',   x: 280, y: 840, w: 160, h: 140 },
+    { id: 'freezer',        x: 460, y: 840, w: 420, h: 160 },
+  ];
+
+  const tplBlocks = isMall ? MALL_TEMPLATE : STANDARD_TEMPLATE;
+  tplBlocks.forEach((tpl, i) => {
+    const areaData = standards.areas.find(a => a.id === tpl.id);
+    if (!areaData) return;
+    const instId = 'block-' + Date.now() + '-' + i;
+    areaInstanceCounters[tpl.id] = (areaInstanceCounters[tpl.id] || 0) + 1;
+    placedAreas.push({
+      id: tpl.id,
+      instanceId: instId,
+      x: tpl.x,
+      y: tpl.y,
+      w: tpl.w,
+      h: tpl.h,
+      num: areaInstanceCounters[tpl.id],
+      cabinetCount: getDefaultCabinet(areaData)
+    });
+    renderBlockOnCanvas(instId);
+  });
+  updatePlaceholder();
+  updateToolbar();
+  showToast(isMall ? '📋 已加载商场店模板' : '📋 已加载标准店模板');
+}
+
 function clearAll() {
   if (!placedAreas.length) return;
   if (!confirm('确定清空画布上所有区域？')) return;
@@ -2767,6 +3203,203 @@ document.getElementById('canvasStage').addEventListener('click', (e) => {
 
 // ============ INIT ============
 init();
+
+// ===== Service Flow Data Loading =====
+const SERVICE_FLOW_EMBEDDED = {"version":"1.0.0","lastUpdated":"2026-05-24","title":"苍井寿司 · 服务流程标准","scope":"所有门店通用","modules":[{"id":"module-1","num":1,"title":"前台接待","sections":[{"id":"reception-etiquette","title":"基本礼仪","content":[{"type":"table","headers":["要求","执行标准"],"rows":[["主动打招呼","顾客进店 5 秒内抬头致意：「您好，欢迎光临苍井！」"],["引导入座/取餐","引导顾客至用餐区域或外卖订单取餐点"],["询问需求","询问顾客是否需要帮助，如提供菜单、解答问题等"],["送客","离店时送一句：「谢谢光临，祝您用餐愉快！」"],["忙碌时","即使在忙，也要点头示意，不冷漠对待"]]}]},{"id":"reception-route","title":"动线意识","content":[{"type":"steps","items":["进门 → 5 秒招呼","靠近 → 主动引导和介绍","停留 → 贴心推荐话术促成","下单 → 60 秒内完成支付取餐"]}]},{"id":"reception-forbidden","title":"接待三大禁止行为","content":[{"type":"table","headers":["禁止行为","为什么不行","正确做法"],"rows":[["趴柜台、靠台子","显得懒散，缺乏精神气","双手自然交叠站立或整理物料"],["玩手机、刷视频","顾客感觉被忽视，立刻转身离开","手机调静音放储物柜，非紧急不查看"],["和同事聊天冷落顾客","传递「我不在乎你」的信号","有人进店立即暂停聊天，优先接待"]]}]},{"id":"reception-professional","title":"专业度要求","content":[{"type":"bullet","items":["能回答基础问题：「这个能加热吗？」→「可以微波炉 5 秒，不同的风味」","「里面有什么食材？」→ 准确说出配料","不说「我不知道」，而是「我帮您确认一下」"]}]}]},{"id":"module-2","num":2,"title":"销售与点餐","sections":[{"id":"sales-upgrade","title":"销售方式升级","content":[{"type":"table","headers":["社区店","商场新店型"],"rows":[["被动等客：「老样子来一份」","主动迎宾：顾客走近即微笑招呼"],["堂食单量相对少","快节奏作战：抓住黄金 30 秒推荐"],["熟客为主，无需过多介绍","陌生客流为主：很多人第一次听说「苍井寿司」"]]},{"type":"callout","text":"核心理念：销售动作要前置，不是等问才答，而是主动开口推荐。"}]},{"id":"sales-principles","title":"销售三原则：快 · 准 · 轻","content":[{"type":"table","headers":["原则","含义","执行要点"],"rows":[["快速响应","顾客进店 5 秒内必须有人接待，抢占注意力的黄金时间","看到顾客靠近展示柜立即上前，主动开口：「您好，欢迎光临苍井寿司！」快速推荐爆款，不等对方提问"],["精准推荐","根据时段和客群特点，推荐最可能成交的产品","午市 → 推「一人套餐」；晚市/周末 → 推「多人套餐」；见小孩 → 推儿童餐；见情侣 → 推拍照好看的套餐"],["轻松无压","语气亲切自然，避免强行推销感，降低决策压力","不说「一定要买」「很划算别错过」，改用「这款很多人喜欢，可以试试看~」；配合微笑、点头，营造轻松氛围"]]},{"type":"callout","text":"推荐话术参考：\n「您好！现在新品寿司限时尝鲜价 39 元任选 12 件，要不要来一份试试？」"}]},{"id":"sales-order","title":"接受订单","content":[{"type":"bullet","items":["提供给顾客点餐二维码或堂食餐牌，确保顾客填写必要的订餐信息，如称呼、联系方式、取餐时间等","确认顾客的订餐要求，如寿司种类、数量、特殊要求等","与顾客核对订单信息的准确性，并复核特殊要求"]}]},{"id":"sales-experience","title":"体验感即转化率","content":[{"type":"table","headers":["维度","要求"],"rows":[["视觉","展示柜丰满、灯光聚焦"],["听觉","热情招呼 + 快速响应"],["触觉","包装精致、配件齐全"]]}]}]},{"id":"module-3","num":3,"title":"备餐与出餐","sections":[{"id":"prep-workflow","title":"前后场联动作战机制","content":[{"type":"code","text":"订单来了 → 营业员报单 → 厨房收到后立即制作 → 制作完喊一声「出餐」 → 营业员核对打包 → 60秒内交付顾客"}]},{"id":"prep-peak","title":"高峰期作战三大核心要求","content":[{"type":"table","headers":["要求","说明","执行动作"],"rows":[["预判产能","不能等订单来了才开始做","午市前完成半成品备货（≥180 件）；展示柜提前摆满（≥360 件）；炸虾、饭团等耗时品提前准备"],["高频补柜","顾客只买「看起来新鲜」的","每 30 分钟巡柜一次，展示柜不是早上摆一次就行，缺了马上补，保持丰满感，这是吸引顾客驻足的关键"],["联动协作","一个人卡住，全队受影响","营业员报单清晰：「王者拼盘 1 个」；厨房听到后立刻响应喊「收到」，完成后喊「出餐」；打包区提前备好袋、筷、酱料，60 秒内交付"]]}]},{"id":"prep-process","title":"备餐流程","content":[{"type":"bullet","items":["将订单传递给厨房或相关工作人员","根据顾客的要求和寿司种类准备食材，并确保食材的新鲜和卫生","完成寿司制作后，将其放置在适当的容器中，并进行出餐"]}]}]},{"id":"module-4","num":4,"title":"交付标准","sections":[{"id":"delivery-principles","title":"套餐三原则：即买 · 即走","content":[{"type":"table","headers":["原则","含义","执行要点"],"rows":[["即买即走","追求「买了就能走」，拒绝等待和复杂选择","套餐提前组合好，无需现场拼单；打包流程标准化，60 秒内交付"],["外带包装精美","不易洒漏、方便边走边吃或办公室用餐","打包要检查好，必须所有盖子盖严实；配件齐全：筷子、芥辣酱油、纸巾一体化包装"],["视觉驱动转化","好产品要「看得见」，用视觉刺激购买欲","展示柜产品摆放整齐、丰满，吸引度；展示柜内干净整洁，玻璃光亮"]]},{"type":"callout","text":"最好的销售不是说服，顾客没时间挑，我们就把「刚好合适」摆在他眼前，让顾客一眼就想带走。"}]},{"id":"delivery-process","title":"交付流程","content":[{"type":"bullet","items":["核对订单的准确性，并核对顾客订单的登记内容与取餐资料是否一致","如需配送请将订单交给配送员，并向其核对配送员取餐号","若使用小程序外卖服务，请先发起配送并将外卖订单移交给外卖人员，确保订单顺利送达至顾客处"]}]},{"id":"delivery-pack","title":"打包标准","content":[{"type":"callout","text":"备注：单量显示几人餐，请遵循以下打包标准："},{"type":"table","headers":["人份","配件"],"rows":[["1 人份","1 双筷子、2 包酱油、1 包芥末、1 个酱油碟"]]}]}]},{"id":"module-5","num":5,"title":"付款处理","sections":[{"id":"payment-process","title":"付款处理","content":[{"type":"bullet","items":["根据顾客的付款方式，如会员支付、现金、或移动支付，收取餐品费用","使用系统或收款工具处理付款，并提供收据或订单确认给顾客","如果顾客有任何付款问题或需要找零，应提供准确的解答和帮助"]}]}]},{"id":"module-6","num":6,"title":"环境卫生","sections":[{"id":"hygiene-daily","title":"日常维护","content":[{"type":"bullet","items":["及时清理用餐区域的桌面、椅子和地面，保持整洁","确保餐具、调料和饮品供应充足，并定期补充","处理垃圾，保持店面环境干净整洁","如有需要，提供顾客服务和解答顾客疑问"]}]},{"id":"hygiene-checklist","title":"日常工作清单","content":[{"type":"bullet","items":["擦拭展示柜玻璃，整理价格标签，确保平整清晰","及时收拾客桌卫生，保持清洁","补充餐具包、筷子、纸巾、芥末酱油包","跟进外卖订单的取餐情况，及时回复平台消息","及时补充展示柜的食品，保持丰满"]}]},{"id":"hygiene-qsc-clean","title":"清洁标准（QSC · Cleanliness）","content":[{"type":"table","headers":["区域","标准要求"],"rows":[["展示柜","无指纹、无水汽、玻璃透亮"],["地面","无饭粒、无油渍、无积水"],["收银台","无杂物堆放，手机不外露"],["酱料区","瓶身干净，盖子拧紧，无溢出"]]},{"type":"callout","text":"顾客看不见我们的流程，但看得见：我们服务态度好不好？地板干不干净？产品是否新鲜？\nQSC 不是一张检查表，而是我们对每一位顾客的无声承诺。"}]}]},{"id":"module-7","num":7,"title":"品质管理","sections":[{"id":"quality-qsc","title":"QSC · Quality（品质——吃得放心）","content":[{"type":"table","headers":["标准要求","执行动作","禁止行为"],"rows":[["所有半成品寿司必须贴时间标签","使用统一标签纸标注「制作时间」；按「先进先出」原则摆放","无标签出品；超时继续售卖"],["半成品 4 小时内未售出必须下架","11:00 做的手握，15:00 前必须撤柜；可提前进行促销及建议性销售","抱着「还能卖」的侥幸心理"],["寿司出品温度控制在 26℃ 左右","避免温度过高，长时间导致食物变质；定期检查实物的状态","食物变质继续售卖"]]}]}]},{"id":"module-8","num":8,"title":"客诉处理","sections":[{"id":"complaint-etiquette","title":"服务话术（QSC · Service）","content":[{"type":"table","headers":["场景","标准话术","目的"],"rows":[["迎宾","「您好，欢迎光临！」","建立第一好感"],["点餐","「请问需要堂食还是外带？」","明确需求，提前准备"],["打包","「这是您的餐点，请慢用。」","体现尊重与仪式感"],["送客","「感谢光临，祝您用餐愉快！」","提升满意度，促进复购"]]}]},{"id":"complaint-principles","title":"客诉处理三原则","content":[{"type":"steps","items":["第一时间上报店长，不擅自承诺","不说：「我不知道」、「这不是我做的」","回应话术：「非常抱歉给您带来不便，我马上为您反馈处理。」"]},{"type":"callout","text":"记住：顾客不是冲你发火，是冲「体验不好」发火——我们代表的是品牌态度。"}]}]}]};
+// ===== Service Flow Editor =====
+let serviceFlowData = null;
+
+function loadServiceFlow() {
+  if (!serviceFlowData) {
+    serviceFlowData = JSON.parse(JSON.stringify(SERVICE_FLOW_EMBEDDED));
+  }
+}
+
+function showServiceFlow() {
+  loadServiceFlow();
+  if (!serviceFlowData || !serviceFlowData.modules) {
+    alert('服务流程数据加载失败，请刷新页面'); return;
+  }
+  const modal = document.getElementById('sfModal');
+  const content = document.getElementById('sfContent');
+  let html = '';
+
+  // Scope editor
+  html += '<div style="background:#FFF3D6;padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;color:#C4851A;display:flex;align-items:center;gap:8px;">';
+  html += '<strong>适用范围：</strong>';
+  html += '<input type="text" id="sf-scope" value="' + esc(serviceFlowData.scope||'所有门店通用') + '" style="flex:1;border:1px solid #E5DDD5;border-radius:4px;padding:4px 8px;font-size:13px;background:#fff;">';
+  html += '</div>';
+
+  serviceFlowData.modules.forEach((mod, mi) => {
+    html += '<div class="sf-module" data-m="' + mi + '" style="margin-bottom:24px;padding-bottom:16px;border-bottom:1px dashed #E5DDD5;">';
+
+    // Module title
+    html += '<div style="font-size:15px;font-weight:700;color:#2D2116;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #E8A020;display:flex;align-items:center;gap:8px;">';
+    html += '<span>模块 ' + mod.num + '：</span>';
+    html += '<input type="text" class="sf-mod-title" data-m="' + mi + '" value="' + esc(mod.title) + '" style="flex:1;font-size:15px;font-weight:700;color:#2D2116;border:1px solid transparent;border-bottom:1px dashed #E5DDD5;background:transparent;padding:2px 4px;">';
+    html += '</div>';
+
+    (mod.sections||[]).forEach((sec, si) => {
+      html += '<div class="sf-section" data-m="' + mi + '" data-s="' + si + '" style="margin-bottom:14px;">';
+
+      // Section title
+      html += '<div style="font-size:13px;font-weight:600;color:#E8A020;margin-bottom:6px;display:flex;align-items:center;gap:6px;">';
+      html += '<input type="text" class="sf-sec-title" data-m="' + mi + '" data-s="' + si + '" value="' + esc(sec.title) + '" style="flex:1;font-size:13px;font-weight:600;color:#E8A020;border:1px solid transparent;border-bottom:1px dashed #E5DDD5;background:transparent;padding:2px 4px;">';
+      html += '</div>';
+
+      (sec.content||[]).forEach((item, ci) => {
+        html += '<div class="sf-item" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" style="margin-bottom:10px;">';
+
+        if (item.type==='table') {
+          html += '<table class="sf-table" style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:4px;">';
+          // Header row
+          html += '<tr style="background:#F5F0EB;">';
+          (item.headers||[]).forEach((h, hi) => {
+            html += '<th contenteditable="true" class="sf-cell" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" data-h="' + hi + '" style="padding:6px 8px;border:1px solid #E5DDD5;text-align:left;min-width:60px;outline:none;background:#FFFDF8;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'#E5DDD5\'">' + esc(h) + '</th>';
+          });
+          html += '<th style="width:32px;border:none;background:transparent;"></th>';
+          html += '</tr>';
+          // Data rows
+          (item.rows||[]).forEach((row, ri) => {
+            html += '<tr>';
+            row.forEach((cell, coli) => {
+              html += '<td contenteditable="true" class="sf-cell" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" data-r="' + ri + '" data-col="' + coli + '" style="padding:6px 8px;border:1px solid #E5DDD5;min-width:60px;outline:none;background:#fff;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'#E5DDD5\'">' + esc(cell) + '</td>';
+            });
+            html += '<td style="border:none;text-align:center;"><button onclick="sfDelRow(' + mi + ',' + si + ',' + ci + ',' + ri + ')" style="background:#fee;border:none;border-radius:4px;color:#c33;cursor:pointer;font-size:11px;padding:2px 6px;" title="删除此行">✕</button></td>';
+            html += '</tr>';
+          });
+          html += '</table>';
+          html += '<button onclick="sfAddRow(' + mi + ',' + si + ',' + ci + ')" style="background:#f0fdf4;border:1px solid #86efac;border-radius:4px;color:#166534;cursor:pointer;font-size:11px;padding:4px 10px;margin-bottom:4px;">+ 新增行</button>';
+        }
+        else if (item.type==='steps') {
+          html += '<ol class="sf-list" style="margin:0;padding-left:24px;font-size:12px;line-height:1.8;">';
+          (item.items||[]).forEach((it, ii) => {
+            html += '<li style="margin-bottom:4px;"><span contenteditable="true" class="sf-li" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" data-i="' + ii + '" style="display:inline-block;min-width:200px;border:1px solid transparent;border-bottom:1px dashed #E5DDD5;padding:2px 4px;outline:none;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'transparent\'">' + esc(it) + '</span>';
+            html += ' <button onclick="sfDelItem(' + mi + ',' + si + ',' + ci + ',' + ii + ')" style="background:#fee;border:none;border-radius:4px;color:#c33;cursor:pointer;font-size:10px;padding:1px 5px;" title="删除">✕</button></li>';
+          });
+          html += '</ol>';
+          html += '<button onclick="sfAddItem(' + mi + ',' + si + ',' + ci + ')" style="background:#f0fdf4;border:1px solid #86efac;border-radius:4px;color:#166534;cursor:pointer;font-size:11px;padding:4px 10px;margin-top:4px;">+ 新增条目</button>';
+        }
+        else if (item.type==='bullet') {
+          html += '<ul class="sf-list" style="margin:0;padding-left:24px;font-size:12px;line-height:1.8;">';
+          (item.items||[]).forEach((it, ii) => {
+            html += '<li style="margin-bottom:4px;"><span contenteditable="true" class="sf-li" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" data-i="' + ii + '" style="display:inline-block;min-width:200px;border:1px solid transparent;border-bottom:1px dashed #E5DDD5;padding:2px 4px;outline:none;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'transparent\'">' + esc(it) + '</span>';
+            html += ' <button onclick="sfDelItem(' + mi + ',' + si + ',' + ci + ',' + ii + ')" style="background:#fee;border:none;border-radius:4px;color:#c33;cursor:pointer;font-size:10px;padding:1px 5px;" title="删除">✕</button></li>';
+          });
+          html += '</ul>';
+          html += '<button onclick="sfAddItem(' + mi + ',' + si + ',' + ci + ')" style="background:#f0fdf4;border:1px solid #86efac;border-radius:4px;color:#166534;cursor:pointer;font-size:11px;padding:4px 10px;margin-top:4px;">+ 新增条目</button>';
+        }
+        else if (item.type==='callout') {
+          html += '<div style="background:#F5F0EB;padding:8px 12px;border-radius:6px;font-size:12px;margin:4px 0;display:flex;align-items:flex-start;gap:6px;">';
+          html += '<span style="flex-shrink:0;">💡</span>';
+          html += '<div contenteditable="true" class="sf-text" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" style="flex:1;min-height:20px;outline:none;border:1px dashed transparent;padding:2px;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'transparent\'">' + esc(item.text||'') + '</div>';
+          html += '</div>';
+        }
+        else if (item.type==='code') {
+          html += '<div contenteditable="true" class="sf-text" data-m="' + mi + '" data-s="' + si + '" data-c="' + ci + '" style="background:#2D2116;color:#E8A020;padding:8px 12px;border-radius:6px;font-size:12px;font-family:monospace;min-height:20px;outline:none;border:1px dashed transparent;" onfocus="this.style.borderColor=\'#E8A020\'" onblur="this.style.borderColor=\'transparent\'">' + esc(item.text||'') + '</div>';
+        }
+
+        html += '</div>'; // sf-item
+      });
+
+      html += '</div>'; // sf-section
+    });
+
+    html += '</div>'; // sf-module
+  });
+
+  content.innerHTML = html;
+  modal.style.display = 'flex';
+  modal.style.justifyContent = 'center';
+  modal.style.alignItems = 'center';
+}
+
+function esc(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function closeServiceFlow() {
+  document.getElementById('sfModal').style.display = 'none';
+}
+
+// --- Editor helpers ---
+function sfAddRow(m, s, c) {
+  const item = serviceFlowData.modules[m].sections[s].content[c];
+  const colCount = (item.headers||[]).length || 2;
+  const newRow = new Array(colCount).fill('');
+  item.rows.push(newRow);
+  showServiceFlow();
+  showToast('✅ 已新增一行');
+}
+function sfDelRow(m, s, c, r) {
+  if (!confirm('确定删除这一行吗？')) return;
+  serviceFlowData.modules[m].sections[s].content[c].rows.splice(r, 1);
+  showServiceFlow();
+  showToast('✅ 已删除');
+}
+function sfAddItem(m, s, c) {
+  const item = serviceFlowData.modules[m].sections[s].content[c];
+  item.items.push('');
+  showServiceFlow();
+  showToast('✅ 已新增条目');
+}
+function sfDelItem(m, s, c, i) {
+  if (!confirm('确定删除这条内容吗？')) return;
+  serviceFlowData.modules[m].sections[s].content[c].items.splice(i, 1);
+  showServiceFlow();
+  showToast('✅ 已删除');
+}
+
+// --- Save ---
+function saveServiceFlow() {
+  const scopeInput = document.getElementById('sf-scope');
+  if (scopeInput) serviceFlowData.scope = scopeInput.value.trim();
+
+  // Save module titles
+  document.querySelectorAll('.sf-mod-title').forEach(el => {
+    const m = +el.dataset.m;
+    serviceFlowData.modules[m].title = el.value.trim();
+  });
+  // Save section titles
+  document.querySelectorAll('.sf-sec-title').forEach(el => {
+    const m = +el.dataset.m, s = +el.dataset.s;
+    serviceFlowData.modules[m].sections[s].title = el.value.trim();
+  });
+  // Save table cells
+  document.querySelectorAll('.sf-cell').forEach(el => {
+    const m = +el.dataset.m, s = +el.dataset.s, c = +el.dataset.c;
+    const item = serviceFlowData.modules[m].sections[s].content[c];
+    if ('h' in el.dataset) {
+      item.headers[+el.dataset.h] = el.innerText.trim();
+    } else if ('r' in el.dataset && 'col' in el.dataset) {
+      item.rows[+el.dataset.r][+el.dataset.col] = el.innerText.trim();
+    }
+  });
+  // Save list items
+  document.querySelectorAll('.sf-li').forEach(el => {
+    const m = +el.dataset.m, s = +el.dataset.s, c = +el.dataset.c, i = +el.dataset.i;
+    serviceFlowData.modules[m].sections[s].content[c].items[i] = el.innerText.trim();
+  });
+  // Save text blocks (callout/code)
+  document.querySelectorAll('.sf-text').forEach(el => {
+    const m = +el.dataset.m, s = +el.dataset.s, c = +el.dataset.c;
+    serviceFlowData.modules[m].sections[s].content[c].text = el.innerText.trim();
+  });
+
+  // Persist
+  try {
+    localStorage.setItem('workbuddy_service_flow', JSON.stringify(serviceFlowData));
+    showToast('✅ 服务流程标准已保存到本地缓存');
+  } catch(e) {
+    alert('保存失败：' + e.message);
+  }
+}
+
+// Make embedded data writable copy
+SERVICE_FLOW_EMBEDDED = JSON.parse(JSON.stringify(SERVICE_FLOW_EMBEDDED));
+
+
 </script>
 </body>
 </html>
