@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lastUpdated": "2026-05-22",
+  "lastUpdated": "2026-05-27",
   "brand": "苍井寿司",
   "storeType": "通用版",
   "areas": [
@@ -45,7 +45,7 @@
           "displayOrder": [
             {
               "position": 1,
-              "category": "套餐",
+              "category": "套餐（摆放在靠近收银区的位置方便拿取）",
               "items": [
                 "门店热卖套餐",
                 "王者套餐",
@@ -246,7 +246,7 @@
           "drawers": [
             {
               "position": 1,
-              "name": "组合餐具包",
+              "name": "组合餐具包（最靠近收银区）",
               "items": [
                 "筷子+纸巾+酱包+芥辣+酱油碟（建议一人份）"
               ],
@@ -917,7 +917,7 @@
       "icon": "snowflake",
       "description": "冷冻食材储存区",
       "required": true,
-      "temperature": "-15℃以下",
+      "temperature": "-18℃以下",
       "subAreas": [
         {
           "id": "freezer-upper",
@@ -990,7 +990,7 @@
         "需张贴：解冻流程指引、效期指引、存放指引",
         "先进先出：新入库放后排，旧料靠前使用",
         "每周至少一次全面除霜与消毒",
-        "每日早班检查温度，低于-15℃"
+        "每日早班检查温度，低于-18℃"
       ]
     }
   ],
